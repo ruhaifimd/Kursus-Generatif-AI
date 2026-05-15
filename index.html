@@ -7,989 +7,533 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
---bg-deep:#06060f;
---bg-card:rgba(255,255,255,0.03);
---bg-card-hover:rgba(255,255,255,0.06);
---accent-blue:#4285f4;
---accent-red:#ea4335;
---accent-yellow:#fbbc04;
---accent-green:#34a853;
---accent-cyan:#00e5ff;
---accent-purple:#a855f7;
---text-primary:#f0f0f5;
---text-secondary:rgba(240,240,245,0.6);
---text-dim:rgba(240,240,245,0.35);
---glass:rgba(255,255,255,0.04);
---glass-border:rgba(255,255,255,0.08);
---glow-blue:0 0 60px rgba(66,133,244,0.3);
---glow-multi:0 0 80px rgba(66,133,244,0.15),0 0 120px rgba(234,67,53,0.1),0 0 160px rgba(251,188,4,0.08);
+--bg:#06060f;--card:rgba(255,255,255,0.03);--card-h:rgba(255,255,255,0.06);
+--blue:#4285f4;--red:#ea4335;--yellow:#fbbc04;--green:#34a853;--cyan:#00e5ff;--purple:#a855f7;
+--t1:#f0f0f5;--t2:rgba(240,240,245,0.6);--t3:rgba(240,240,245,0.35);
+--glass:rgba(255,255,255,0.04);--gb:rgba(255,255,255,0.08);
 }
 html{scroll-behavior:smooth;overflow-x:hidden}
-body{
-font-family:'Outfit',sans-serif;
-background:var(--bg-deep);
-color:var(--text-primary);
-overflow-x:hidden;
-}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(66,133,244,.08),transparent),radial-gradient(ellipse 60% 50% at 80% 90%,rgba(234,67,53,.06),transparent),radial-gradient(ellipse 50% 40% at 50% 50%,rgba(251,188,4,.04),transparent);pointer-events:none;z-index:0}
 
-/* ===== GLOBAL BG EFFECTS ===== */
-body::before{
-content:'';position:fixed;top:0;left:0;width:100%;height:100%;
-background:
-  radial-gradient(ellipse 80% 60% at 20% 10%,rgba(66,133,244,0.08),transparent),
-  radial-gradient(ellipse 60% 50% at 80% 90%,rgba(234,67,53,0.06),transparent),
-  radial-gradient(ellipse 50% 40% at 50% 50%,rgba(251,188,4,0.04),transparent);
-pointer-events:none;z-index:0;
-}
+/* Particles */
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.particle{position:absolute;border-radius:50%;animation:floatUp linear infinite;opacity:0}
+@keyframes floatUp{0%{transform:translateY(110vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) scale(1);opacity:0}}
 
-/* ===== FLOATING PARTICLES (CSS only) ===== */
-.particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
-.particle{
-position:absolute;border-radius:50%;
-animation:floatUp linear infinite;
-opacity:0;
-}
-@keyframes floatUp{
-0%{transform:translateY(110vh) scale(0);opacity:0}
-10%{opacity:1}
-90%{opacity:1}
-100%{transform:translateY(-10vh) scale(1);opacity:0}
-}
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(6,6,15,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--gb);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px}
+.nav-brand{font-family:'Sora',sans-serif;font-weight:700;font-size:.95rem;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:.25rem;align-items:center;overflow-x:auto;max-width:72%}.nav-links::-webkit-scrollbar{display:none}
+.nav-link{font-size:.7rem;padding:.35rem .65rem;border-radius:6px;color:var(--t2);text-decoration:none;white-space:nowrap;transition:all .2s;font-weight:500}
+.nav-link:hover,.nav-link.active{color:var(--t1);background:var(--glass)}
+.nav-progress{position:absolute;bottom:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--red),var(--yellow),var(--green));transition:width .3s}
 
-/* ===== NAVIGATION ===== */
-nav{
-position:fixed;top:0;left:0;right:0;z-index:1000;
-background:rgba(6,6,15,0.85);
-backdrop-filter:blur(20px);
-border-bottom:1px solid var(--glass-border);
-padding:0 2rem;
-display:flex;align-items:center;justify-content:space-between;
-height:60px;
-transition:transform 0.3s;
-}
-nav.hidden{transform:translateY(-100%)}
-.nav-brand{
-font-family:'Sora',sans-serif;font-weight:700;font-size:0.95rem;
-background:linear-gradient(135deg,var(--accent-blue),var(--accent-cyan));
--webkit-background-clip:text;-webkit-text-fill-color:transparent;
-letter-spacing:-0.02em;
-}
-.nav-links{display:flex;gap:0.25rem;align-items:center;flex-wrap:nowrap;overflow-x:auto;max-width:70%}
-.nav-links::-webkit-scrollbar{display:none}
-.nav-link{
-font-size:0.7rem;padding:0.35rem 0.65rem;border-radius:6px;
-color:var(--text-secondary);text-decoration:none;white-space:nowrap;
-transition:all 0.2s;font-weight:500;
-}
-.nav-link:hover,.nav-link.active{color:var(--text-primary);background:var(--glass)}
-.nav-progress{
-position:absolute;bottom:0;left:0;height:2px;
-background:linear-gradient(90deg,var(--accent-blue),var(--accent-red),var(--accent-yellow),var(--accent-green));
-transition:width 0.3s;
-}
+/* Sections */
+section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;padding:5rem 2rem 3rem}
+.inner{max-width:1100px;width:100%;margin:0 auto}
 
-/* ===== SLIDE SECTIONS ===== */
-section{
-min-height:100vh;
-position:relative;
-z-index:1;
-display:flex;align-items:center;justify-content:center;
-padding:5rem 2rem 3rem;
-}
-.slide-inner{max-width:1100px;width:100%;margin:0 auto}
-
-/* ===== HERO / TITLE SLIDE ===== */
-.hero{
-text-align:center;
-flex-direction:column;
-}
-.hero-badge{
-display:inline-flex;align-items:center;gap:0.5rem;
-padding:0.5rem 1.2rem;border-radius:100px;
-background:var(--glass);border:1px solid var(--glass-border);
-font-size:0.8rem;color:var(--accent-cyan);font-weight:500;
-margin-bottom:2rem;
-animation:fadeInDown 0.8s ease both;
-}
-.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-green);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.hero h1{
-font-family:'Sora',sans-serif;
-font-size:clamp(2.5rem,7vw,5.5rem);
-font-weight:900;
-line-height:1.05;
-letter-spacing:-0.04em;
-margin-bottom:1rem;
-animation:fadeInUp 1s ease both 0.2s;
-opacity:0;
-}
-.hero h1 .gradient-text{
-background:linear-gradient(135deg,var(--accent-blue) 0%,var(--accent-cyan) 25%,var(--accent-green) 50%,var(--accent-yellow) 75%,var(--accent-red) 100%);
--webkit-background-clip:text;-webkit-text-fill-color:transparent;
-background-size:200% auto;
-animation:shimmer 4s linear infinite;
-}
+/* Hero */
+.hero{text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1.2rem;border-radius:100px;background:var(--glass);border:1px solid var(--gb);font-size:.8rem;color:var(--cyan);font-weight:500;margin-bottom:2rem;animation:fadeInDown .8s ease both}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:'Sora',sans-serif;font-size:clamp(2.5rem,7vw,5.5rem);font-weight:900;line-height:1.05;letter-spacing:-.04em;margin-bottom:1rem;animation:fadeInUp 1s ease both .2s;opacity:0}
+.grad{background:linear-gradient(135deg,var(--blue),var(--cyan),var(--green),var(--yellow),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% auto;animation:shimmer 4s linear infinite}
 @keyframes shimmer{0%{background-position:0% center}100%{background-position:200% center}}
-.hero .subtitle{
-font-size:clamp(1rem,2.5vw,1.5rem);
-color:var(--text-secondary);
-font-weight:300;
-margin-bottom:2.5rem;
-animation:fadeInUp 1s ease both 0.4s;
-opacity:0;
-}
-.hero-meta{
-display:flex;flex-wrap:wrap;justify-content:center;gap:1.5rem;
-animation:fadeInUp 1s ease both 0.6s;
-opacity:0;
-}
-.meta-item{
-display:flex;align-items:center;gap:0.5rem;
-font-size:0.85rem;color:var(--text-secondary);
-}
-.meta-item svg{width:18px;height:18px;stroke:var(--accent-cyan);fill:none;stroke-width:1.5}
-.hero-presenter{
-margin-top:3rem;
-padding:1.5rem 2rem;
-background:var(--glass);
-border:1px solid var(--glass-border);
-border-radius:16px;
-display:inline-flex;flex-direction:column;align-items:center;gap:0.3rem;
-animation:fadeInUp 1s ease both 0.8s;
-opacity:0;
-}
-.hero-presenter .name{
-font-family:'Sora',sans-serif;font-weight:700;font-size:1.1rem;
-}
-.hero-presenter .title{font-size:0.8rem;color:var(--accent-cyan);font-weight:500}
-.hero-presenter .org{font-size:0.75rem;color:var(--text-dim)}
-.scroll-hint{
-position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
-display:flex;flex-direction:column;align-items:center;gap:0.5rem;
-color:var(--text-dim);font-size:0.7rem;font-weight:500;letter-spacing:0.1em;
-animation:fadeInUp 1s ease both 1.2s,bounce 2s ease-in-out infinite 2s;
-opacity:0;
-}
+.hero .sub{font-size:clamp(1rem,2.5vw,1.5rem);color:var(--t2);font-weight:300;margin-bottom:2.5rem;animation:fadeInUp 1s ease both .4s;opacity:0}
+.hero-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:1.5rem;animation:fadeInUp 1s ease both .6s;opacity:0}
+.mi{display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--t2)}
+.mi svg{width:18px;height:18px;stroke:var(--cyan);fill:none;stroke-width:1.5}
+.presenter{margin-top:3rem;padding:1.5rem 2rem;background:var(--glass);border:1px solid var(--gb);border-radius:16px;display:inline-flex;flex-direction:column;align-items:center;gap:.3rem;animation:fadeInUp 1s ease both .8s;opacity:0}
+.presenter .nm{font-family:'Sora',sans-serif;font-weight:700;font-size:1.1rem}
+.presenter .ti{font-size:.8rem;color:var(--cyan);font-weight:500}
+.presenter .og{font-size:.75rem;color:var(--t3)}
+.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--t3);font-size:.7rem;font-weight:500;letter-spacing:.1em;animation:fadeInUp 1s ease both 1.2s,bounce 2s ease-in-out infinite 2s;opacity:0}
 @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-8px)}}
-.scroll-hint svg{width:20px;height:20px;stroke:var(--text-dim);fill:none;stroke-width:1.5}
-
+.scroll-hint svg{width:20px;height:20px;stroke:var(--t3);fill:none;stroke-width:1.5}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
 
-/* ===== SECTION TITLES ===== */
-.section-label{
-font-family:'Space Mono',monospace;
-font-size:0.7rem;letter-spacing:0.15em;
-color:var(--accent-cyan);
-text-transform:uppercase;
-margin-bottom:0.75rem;
-}
-.section-title{
-font-family:'Sora',sans-serif;
-font-size:clamp(1.8rem,4vw,3rem);
-font-weight:800;
-letter-spacing:-0.03em;
-line-height:1.15;
-margin-bottom:1rem;
-}
-.section-desc{
-font-size:1rem;color:var(--text-secondary);
-line-height:1.7;max-width:700px;
-margin-bottom:2.5rem;
-font-weight:300;
-}
+/* Section common */
+.sl{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.15em;color:var(--cyan);text-transform:uppercase;margin-bottom:.75rem}
+.st{font-family:'Sora',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:1rem}
+.sd{font-size:1rem;color:var(--t2);line-height:1.7;max-width:700px;margin-bottom:2.5rem;font-weight:300}
+.divider{width:60px;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:3px;margin-bottom:2rem}
 
-/* ===== CARDS GRID ===== */
-.cards-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:1.25rem;
-}
-.card{
-background:var(--bg-card);
-border:1px solid var(--glass-border);
-border-radius:16px;
-padding:1.75rem;
-transition:all 0.35s cubic-bezier(0.4,0,0.2,1);
-position:relative;overflow:hidden;
-cursor:default;
-}
-.card::before{
-content:'';position:absolute;top:0;left:0;right:0;height:2px;
-background:linear-gradient(90deg,var(--card-accent,var(--accent-blue)),transparent);
-opacity:0;transition:opacity 0.3s;
-}
-.card:hover{
-background:var(--bg-card-hover);
-border-color:rgba(255,255,255,0.12);
-transform:translateY(-4px);
-box-shadow:var(--glow-blue);
-}
-.card:hover::before{opacity:1}
-.card-icon{
-width:48px;height:48px;
-border-radius:12px;
-display:flex;align-items:center;justify-content:center;
-margin-bottom:1rem;
-font-size:1.5rem;
-}
-.card h3{
-font-family:'Sora',sans-serif;
-font-size:1.05rem;font-weight:700;
-margin-bottom:0.5rem;
-letter-spacing:-0.01em;
-}
-.card p{
-font-size:0.85rem;color:var(--text-secondary);line-height:1.6;
-font-weight:300;
-}
-.card .tag{
-display:inline-block;
-margin-top:0.75rem;
-padding:0.2rem 0.6rem;
-border-radius:100px;
-font-size:0.65rem;
-font-weight:600;
-letter-spacing:0.05em;
-}
+/* Cards */
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem}
+.c{background:var(--card);border:1px solid var(--gb);border-radius:16px;padding:1.75rem;transition:all .35s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+.c::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--ca,var(--blue)),transparent);opacity:0;transition:opacity .3s}
+.c:hover{background:var(--card-h);border-color:rgba(255,255,255,.12);transform:translateY(-4px);box-shadow:0 0 60px rgba(66,133,244,.3)}
+.c:hover::before{opacity:1}
+.ci{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;font-size:1.5rem}
+.c h3{font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:.5rem}
+.c p{font-size:.85rem;color:var(--t2);line-height:1.6;font-weight:300}
+.tag{display:inline-block;margin-top:.75rem;padding:.2rem .6rem;border-radius:100px;font-size:.65rem;font-weight:600;letter-spacing:.05em}
+.c[data-a="b"]{--ca:var(--blue)}.c[data-a="b"] .ci{background:rgba(66,133,244,.12)}.c[data-a="b"] .tag{background:rgba(66,133,244,.15);color:var(--blue)}
+.c[data-a="r"]{--ca:var(--red)}.c[data-a="r"] .ci{background:rgba(234,67,53,.12)}.c[data-a="r"] .tag{background:rgba(234,67,53,.15);color:var(--red)}
+.c[data-a="y"]{--ca:var(--yellow)}.c[data-a="y"] .ci{background:rgba(251,188,4,.12)}.c[data-a="y"] .tag{background:rgba(251,188,4,.15);color:var(--yellow)}
+.c[data-a="g"]{--ca:var(--green)}.c[data-a="g"] .ci{background:rgba(52,168,83,.12)}.c[data-a="g"] .tag{background:rgba(52,168,83,.15);color:var(--green)}
+.c[data-a="c"]{--ca:var(--cyan)}.c[data-a="c"] .ci{background:rgba(0,229,255,.12)}.c[data-a="c"] .tag{background:rgba(0,229,255,.15);color:var(--cyan)}
+.c[data-a="p"]{--ca:var(--purple)}.c[data-a="p"] .ci{background:rgba(168,85,247,.12)}.c[data-a="p"] .tag{background:rgba(168,85,247,.15);color:var(--purple)}
 
-/* Card accent colors */
-.card[data-accent="blue"]{--card-accent:var(--accent-blue)}
-.card[data-accent="blue"] .card-icon{background:rgba(66,133,244,0.12)}
-.card[data-accent="blue"] .tag{background:rgba(66,133,244,0.15);color:var(--accent-blue)}
+/* Two col */
+.tc{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
 
-.card[data-accent="red"]{--card-accent:var(--accent-red)}
-.card[data-accent="red"] .card-icon{background:rgba(234,67,53,0.12)}
-.card[data-accent="red"] .tag{background:rgba(234,67,53,0.15);color:var(--accent-red)}
+/* Steps */
+.slist{display:flex;flex-direction:column;gap:1.25rem}
+.stp{display:flex;gap:1rem;align-items:flex-start;padding:1.25rem;background:var(--card);border:1px solid var(--gb);border-radius:12px;transition:all .3s}
+.stp:hover{background:var(--card-h);border-color:rgba(255,255,255,.12)}
+.sn{font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;color:var(--cyan);min-width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,229,255,.3);border-radius:8px;flex-shrink:0;margin-top:.1rem}
+.stp h4{font-size:.95rem;font-weight:600;margin-bottom:.25rem}
+.stp p{font-size:.8rem;color:var(--t2);line-height:1.5;font-weight:300}
 
-.card[data-accent="yellow"]{--card-accent:var(--accent-yellow)}
-.card[data-accent="yellow"] .card-icon{background:rgba(251,188,4,0.12)}
-.card[data-accent="yellow"] .tag{background:rgba(251,188,4,0.15);color:var(--accent-yellow)}
+/* Gems */
+.gg{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+.gc{background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(66,133,244,.05));border:1px solid rgba(168,85,247,.15);border-radius:16px;padding:1.5rem;transition:all .35s}
+.gc:hover{transform:translateY(-3px);box-shadow:0 0 40px rgba(168,85,247,.15);border-color:rgba(168,85,247,.3)}
+.gc .ge{font-size:2rem;margin-bottom:.75rem;display:block}
+.gc h3{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.4rem}
+.gc .gp{font-size:.8rem;color:var(--purple);font-weight:500;margin-bottom:.5rem}
+.gc p{font-size:.78rem;color:var(--t2);line-height:1.55}
 
-.card[data-accent="green"]{--card-accent:var(--accent-green)}
-.card[data-accent="green"] .card-icon{background:rgba(52,168,83,0.12)}
-.card[data-accent="green"] .tag{background:rgba(52,168,83,0.15);color:var(--accent-green)}
+/* Prompt box */
+.pb{background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.12);border-radius:12px;padding:1.25rem 1.5rem;margin-top:1rem;font-family:'Space Mono',monospace;font-size:.78rem;color:var(--cyan);line-height:1.7;position:relative}
+.pb::before{content:'PROMPT';position:absolute;top:-.5rem;left:1rem;background:var(--bg);padding:0 .5rem;font-size:.6rem;letter-spacing:.1em;color:var(--t3)}
 
-.card[data-accent="cyan"]{--card-accent:var(--accent-cyan)}
-.card[data-accent="cyan"] .card-icon{background:rgba(0,229,255,0.12)}
-.card[data-accent="cyan"] .tag{background:rgba(0,229,255,0.15);color:var(--accent-cyan)}
+/* NotebookLM */
+.nf{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem}
+.nc{background:linear-gradient(135deg,rgba(251,188,4,.06),rgba(234,67,53,.04));border:1px solid rgba(251,188,4,.12);border-radius:16px;padding:1.75rem;transition:all .35s}
+.nc:hover{transform:translateY(-3px);box-shadow:0 0 40px rgba(251,188,4,.12);border-color:rgba(251,188,4,.25)}
+.nc h3{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.nc p{font-size:.82rem;color:var(--t2);line-height:1.6}
 
-.card[data-accent="purple"]{--card-accent:var(--accent-purple)}
-.card[data-accent="purple"] .card-icon{background:rgba(168,85,247,0.12)}
-.card[data-accent="purple"] .tag{background:rgba(168,85,247,0.15);color:var(--accent-purple)}
+/* Tips */
+.tg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+.tp{padding:1.5rem;background:var(--card);border:1px solid var(--gb);border-radius:14px;transition:all .3s}
+.tp:hover{background:var(--card-h)}
+.tp .tpi{font-size:1.5rem;margin-bottom:.75rem;display:block}
+.tp h4{font-size:.95rem;font-weight:600;margin-bottom:.4rem}
+.tp p{font-size:.8rem;color:var(--t2);line-height:1.55}
 
-/* ===== TWO COLUMN LAYOUT ===== */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
-@media(max-width:768px){.two-col{grid-template-columns:1fr;gap:2rem}}
+/* Footer */
+.fs{text-align:center}
+.fs .bt{font-family:'Sora',sans-serif;font-size:clamp(2rem,5vw,4rem);font-weight:900;letter-spacing:-.03em;margin-bottom:1.5rem}
+.fc{display:flex;flex-wrap:wrap;justify-content:center;gap:1.5rem;margin-top:2rem}
+.ci2{display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--t2)}
+.ci2 svg{width:18px;height:18px;stroke:var(--cyan);fill:none;stroke-width:1.5}
 
-/* ===== STEP LIST ===== */
-.step-list{display:flex;flex-direction:column;gap:1.25rem}
-.step{
-display:flex;gap:1rem;align-items:flex-start;
-padding:1.25rem;
-background:var(--bg-card);
-border:1px solid var(--glass-border);
-border-radius:12px;
-transition:all 0.3s;
-}
-.step:hover{background:var(--bg-card-hover);border-color:rgba(255,255,255,0.12)}
-.step-num{
-font-family:'Space Mono',monospace;
-font-size:0.75rem;font-weight:700;
-color:var(--accent-cyan);
-min-width:28px;height:28px;
-display:flex;align-items:center;justify-content:center;
-border:1px solid rgba(0,229,255,0.3);
-border-radius:8px;
-flex-shrink:0;margin-top:0.1rem;
-}
-.step h4{font-size:0.95rem;font-weight:600;margin-bottom:0.25rem}
-.step p{font-size:0.8rem;color:var(--text-secondary);line-height:1.5;font-weight:300}
+/* Reveal */
+.rv{opacity:0;transform:translateY(40px);transition:all .8s cubic-bezier(.4,0,.2,1)}
+.rv.vis{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}
 
-/* ===== GEMS SECTION ===== */
-.gems-showcase{
-display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-gap:1rem;
-}
-.gem-card{
-background:linear-gradient(135deg,rgba(168,85,247,0.08),rgba(66,133,244,0.05));
-border:1px solid rgba(168,85,247,0.15);
-border-radius:16px;padding:1.5rem;
-transition:all 0.35s;
-position:relative;
-}
-.gem-card:hover{
-transform:translateY(-3px);
-box-shadow:0 0 40px rgba(168,85,247,0.15);
-border-color:rgba(168,85,247,0.3);
-}
-.gem-card .gem-emoji{font-size:2rem;margin-bottom:0.75rem;display:block}
-.gem-card h3{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;margin-bottom:0.4rem}
-.gem-card .gem-purpose{font-size:0.8rem;color:var(--accent-purple);font-weight:500;margin-bottom:0.5rem}
-.gem-card p{font-size:0.78rem;color:var(--text-secondary);line-height:1.55}
+/* ===== LIVE POLL ===== */
+.plb{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .8rem;border-radius:100px;background:rgba(52,168,83,.1);border:1px solid rgba(52,168,83,.2);font-size:.7rem;color:var(--green);font-weight:600;letter-spacing:.05em}
+.pld{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.pq{font-family:'Sora',sans-serif;font-size:clamp(1.5rem,4vw,2.5rem);font-weight:800;color:var(--t1);line-height:1.2;margin:.75rem 0}
+#wc{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.5rem;padding:2rem;min-height:320px;background:rgba(255,255,255,.015);border:1px solid var(--gb);border-radius:20px}
+#wc:empty::after{content:'Menunggu jawapan daripada audien...';color:var(--t3);font-size:.9rem}
+.ww{display:inline-block;padding:.1rem .35rem;transition:all .5s;cursor:default;line-height:1.3;animation:wp .4s ease both}
+@keyframes wp{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+#lf{max-height:350px;overflow-y:auto;display:flex;flex-direction:column;gap:.5rem;padding:1rem;margin-top:1rem;border:1px solid var(--gb);border-radius:16px;background:rgba(255,255,255,.015)}
+#lf::-webkit-scrollbar{width:4px}#lf::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
+.fi{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:12px;animation:sil .4s ease both}
+@keyframes sil{from{opacity:0;transform:translateX(-15px)}to{opacity:1;transform:translateX(0)}}
+.fa{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;color:#fff;flex-shrink:0}
+.fm{font-size:.72rem;color:var(--t3);margin-bottom:.15rem}
+.ft{font-size:.88rem;color:var(--t1);line-height:1.4;word-break:break-word}
+.pc{display:flex;justify-content:center;gap:.5rem;margin-top:1.5rem;flex-wrap:wrap}
+.pb2{padding:.5rem 1rem;border-radius:10px;border:none;font-size:.75rem;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s}
 
-/* ===== PROMPT EXAMPLE BOX ===== */
-.prompt-box{
-background:rgba(0,229,255,0.04);
-border:1px solid rgba(0,229,255,0.12);
-border-radius:12px;
-padding:1.25rem 1.5rem;
-margin-top:1rem;
-font-family:'Space Mono',monospace;
-font-size:0.78rem;
-color:var(--accent-cyan);
-line-height:1.7;
-position:relative;
-}
-.prompt-box::before{
-content:'PROMPT';
-position:absolute;top:-0.5rem;left:1rem;
-background:var(--bg-deep);
-padding:0 0.5rem;
-font-size:0.6rem;letter-spacing:0.1em;
-color:var(--text-dim);
-}
-
-/* ===== NOTEBOOKLM SECTION ===== */
-.nb-features{
-display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:1.25rem;
-}
-.nb-card{
-background:linear-gradient(135deg,rgba(251,188,4,0.06),rgba(234,67,53,0.04));
-border:1px solid rgba(251,188,4,0.12);
-border-radius:16px;padding:1.75rem;
-transition:all 0.35s;
-}
-.nb-card:hover{
-transform:translateY(-3px);
-box-shadow:0 0 40px rgba(251,188,4,0.12);
-border-color:rgba(251,188,4,0.25);
-}
-.nb-card h3{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;margin-bottom:0.5rem}
-.nb-card p{font-size:0.82rem;color:var(--text-secondary);line-height:1.6}
-
-/* ===== TIPS GRID ===== */
-.tips-grid{
-display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:1rem;
-}
-.tip{
-padding:1.5rem;
-background:var(--bg-card);
-border:1px solid var(--glass-border);
-border-radius:14px;
-transition:all 0.3s;
-}
-.tip:hover{background:var(--bg-card-hover)}
-.tip .tip-icon{font-size:1.5rem;margin-bottom:0.75rem;display:block}
-.tip h4{font-size:0.95rem;font-weight:600;margin-bottom:0.4rem}
-.tip p{font-size:0.8rem;color:var(--text-secondary);line-height:1.55}
-
-/* ===== FOOTER SLIDE ===== */
-.footer-slide{text-align:center}
-.footer-slide .big-text{
-font-family:'Sora',sans-serif;
-font-size:clamp(2rem,5vw,4rem);
-font-weight:900;
-letter-spacing:-0.03em;
-margin-bottom:1.5rem;
-}
-.footer-contact{
-display:flex;flex-wrap:wrap;justify-content:center;gap:1.5rem;
-margin-top:2rem;
-}
-.contact-item{
-display:flex;align-items:center;gap:0.5rem;
-font-size:0.85rem;color:var(--text-secondary);
-}
-.contact-item svg{width:18px;height:18px;stroke:var(--accent-cyan);fill:none;stroke-width:1.5}
-
-/* ===== DIVIDER ===== */
-.section-divider{
-width:60px;height:3px;
-background:linear-gradient(90deg,var(--accent-blue),var(--accent-cyan));
-border-radius:3px;
-margin-bottom:2rem;
-}
-
-/* ===== ANIMATE ON SCROLL ===== */
-.reveal{
-opacity:0;transform:translateY(40px);
-transition:all 0.8s cubic-bezier(0.4,0,0.2,1);
-}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.reveal-delay-1{transition-delay:0.1s}
-.reveal-delay-2{transition-delay:0.2s}
-.reveal-delay-3{transition-delay:0.3s}
-.reveal-delay-4{transition-delay:0.4s}
-.reveal-delay-5{transition-delay:0.5s}
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:640px){
-  nav{padding:0 1rem}
-  .nav-brand{font-size:0.8rem}
-  section{padding:4.5rem 1.25rem 2rem}
-  .cards-grid,.gems-showcase,.nb-features,.tips-grid{grid-template-columns:1fr}
-  .hero-meta{flex-direction:column;align-items:center;gap:0.75rem}
-}
-
-/* ===== KEYBOARD NAV HINT ===== */
-.key-hint{
-position:fixed;bottom:1.5rem;right:1.5rem;
-display:flex;gap:0.4rem;align-items:center;
-z-index:999;
-opacity:0.4;transition:opacity 0.3s;
-}
-.key-hint:hover{opacity:0.8}
-.key-btn{
-width:32px;height:32px;border-radius:8px;
-background:var(--glass);border:1px solid var(--glass-border);
-display:flex;align-items:center;justify-content:center;
-font-size:0.7rem;color:var(--text-secondary);
-font-family:'Space Mono',monospace;
-}
-@media(max-width:768px){.key-hint{display:none}}
+/* Audience page */
+.ap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:1.5rem;position:fixed;inset:0;z-index:9999}
+.ap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(66,133,244,.1),transparent);pointer-events:none}
+.ac{width:100%;max-width:480px;position:relative;z-index:1}
+.ac h1{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:800;color:var(--t1);line-height:1.2;margin-bottom:.5rem;text-align:center}
+.asub{font-size:.8rem;color:var(--t3);text-align:center;margin-bottom:2rem}
+.al{font-size:.75rem;color:var(--t3);margin-bottom:.35rem;display:block;font-weight:500}
+.ai,.at{width:100%;padding:.8rem 1rem;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--t1);font-size:.95rem;outline:none;font-family:'Outfit',sans-serif;transition:border-color .2s}
+.ai:focus,.at:focus{border-color:rgba(0,229,255,.3)}
+.at{resize:vertical;line-height:1.5}
+.abtn{width:100%;padding:.85rem;border-radius:12px;border:none;background:linear-gradient(135deg,#4285f4,#00e5ff);color:#fff;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Sora',sans-serif;transition:all .3s}
+.abtn:disabled{background:rgba(255,255,255,.06);color:var(--t3);cursor:default}
+.sp{text-align:center}.sp .ej{font-size:4rem;margin-bottom:1rem}.sp h2{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:700;margin-bottom:.75rem}.sp p{font-size:.9rem;color:var(--t2);line-height:1.6;margin-bottom:1.5rem}
+.aag{padding:.7rem 1.5rem;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--cyan);font-size:.85rem;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif}
+.kh{position:fixed;bottom:1.5rem;right:1.5rem;display:flex;gap:.4rem;align-items:center;z-index:999;opacity:.4;transition:opacity .3s}.kh:hover{opacity:.8}
+.kb{width:32px;height:32px;border-radius:8px;background:var(--glass);border:1px solid var(--gb);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--t2);font-family:'Space Mono',monospace}
+@media(max-width:768px){.tc{grid-template-columns:1fr;gap:2rem}.kh{display:none}}
+@media(max-width:640px){nav{padding:0 1rem}.nav-brand{font-size:.8rem}section{padding:4.5rem 1.25rem 2rem}.cg,.gg,.nf,.tg{grid-template-columns:1fr}.hero-meta{flex-direction:column;align-items:center;gap:.75rem}}
 </style>
 </head>
 <body>
 
-<!-- PARTICLES -->
+<!-- ===== AUDIENCE RESPONSE PAGE ===== -->
+<div class="ap" id="ap" style="display:none">
+  <div class="ac" id="af">
+    <div style="text-align:center;margin-bottom:1.5rem"><div class="plb"><span class="pld"></span> LIVE</div></div>
+    <h1 id="aq">Apa yang anda tahu tentang AI?</h1>
+    <p class="asub">Kursus Generatif AI 2026 · PKD Tumpat</p>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div><label class="al">Nama (pilihan)</label><input type="text" class="ai" id="an" placeholder="cth: Ahmad"></div>
+      <div><label class="al">Jawapan anda</label><textarea class="at" id="aa" rows="4" placeholder="Taip jawapan anda di sini..."></textarea></div>
+      <button class="abtn" id="ab" disabled onclick="submitR()">Hantar Jawapan →</button>
+    </div>
+  </div>
+  <div class="ac sp" id="as" style="display:none">
+    <div class="ej">✅</div>
+    <h2>Terima Kasih!</h2>
+    <p>Jawapan anda telah dihantar. Sila lihat ke skrin hadapan untuk melihat hasil secara live.</p>
+    <button class="aag" onclick="resetAF()">Hantar jawapan lain</button>
+  </div>
+</div>
+
 <div class="particles" id="particles"></div>
 
-<!-- NAVIGATION -->
-<nav id="navbar">
+<!-- NAV -->
+<nav id="nav">
   <div class="nav-brand">AI KURSUS</div>
   <div class="nav-links">
     <a href="#hero" class="nav-link active">Mula</a>
-    <a href="#apa-itu" class="nav-link">Apa Itu AI</a>
+    <a href="#poll" class="nav-link">📊 Live Poll</a>
+    <a href="#apaitu" class="nav-link">Apa Itu AI</a>
     <a href="#gemini" class="nav-link">Gemini</a>
     <a href="#tools" class="nav-link">Tools</a>
     <a href="#prompting" class="nav-link">Prompting</a>
     <a href="#gems" class="nav-link">Gems</a>
-    <a href="#notebooklm" class="nav-link">NotebookLM</a>
+    <a href="#nbklm" class="nav-link">NotebookLM</a>
     <a href="#tips" class="nav-link">Tips</a>
-    <a href="#penutup" class="nav-link">Penutup</a>
+    <a href="#end" class="nav-link">Penutup</a>
   </div>
-  <div class="nav-progress" id="progress"></div>
+  <div class="nav-progress" id="prog"></div>
 </nav>
 
-<!-- =============================== -->
-<!-- SLIDE 1: HERO -->
-<!-- =============================== -->
+<!-- ============ SLIDE 1: HERO ============ -->
 <section id="hero" class="hero">
-<div class="slide-inner" style="display:flex;flex-direction:column;align-items:center">
+<div class="inner" style="display:flex;flex-direction:column;align-items:center">
   <div class="hero-badge"><span class="dot"></span> Kursus Generatif AI 2026</div>
-  <h1>
-    <span class="gradient-text">Gemini</span> &<br>
-    <span class="gradient-text">NotebookLM</span>
-  </h1>
-  <p class="subtitle">Tingkatkan Produktiviti Kerja Anda Dengan AI</p>
+  <h1><span class="grad">Gemini</span> &<br><span class="grad">NotebookLM</span></h1>
+  <p class="sub">Tingkatkan Produktiviti Kerja Anda Dengan AI</p>
   <div class="hero-meta">
-    <div class="meta-item">
-      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      18 Mei 2026
-    </div>
-    <div class="meta-item">
-      <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      PKD Tumpat, Kelantan
-    </div>
-    <div class="meta-item">
-      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-      Unit Pengurusan PKD
-    </div>
-    <div class="meta-item">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      70% Praktikal · 30% Teori
-    </div>
+    <div class="mi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>18 Mei 2026</div>
+    <div class="mi"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>PKD Tumpat, Kelantan</div>
+    <div class="mi"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Unit Pengurusan PKD</div>
+    <div class="mi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>70% Praktikal · 30% Teori</div>
   </div>
-  <div class="hero-presenter">
-    <span class="name">Dr. Muhammad Ruhaifi bin Muhammad Sabri</span>
-    <span class="title">Gemini Certified Educator</span>
-    <span class="org">Pegawai Perubatan, PKD Tumpat</span>
+  <div class="presenter">
+    <span class="nm">Dr. Muhammad Ruhaifi bin Muhammad Sabri</span>
+    <span class="ti">Gemini Certified Educator</span>
+    <span class="og">Pegawai Perubatan, PKD Tumpat</span>
   </div>
 </div>
-<div class="scroll-hint">
-  SCROLL UNTUK MULA
-  <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-</div>
+<div class="scroll-hint">SCROLL UNTUK MULA<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
 </section>
 
-<!-- =============================== -->
-<!-- SLIDE 2: APA ITU AI? -->
-<!-- =============================== -->
-<section id="apa-itu">
-<div class="slide-inner">
-  <div class="two-col">
-    <div>
-      <div class="section-label reveal">PENGENALAN</div>
-      <div class="section-divider reveal reveal-delay-1"></div>
-      <h2 class="section-title reveal reveal-delay-1">Apa Itu<br><span style="color:var(--accent-cyan)">Generatif AI?</span></h2>
-      <p class="section-desc reveal reveal-delay-2">
-        AI Generatif ialah teknologi kecerdasan buatan yang boleh menghasilkan teks, imej, video, muzik, dan pelbagai kandungan baharu — bukan sekadar menganalisis data sedia ada, tetapi <strong style="color:var(--text-primary)">mencipta sesuatu yang baru</strong> berdasarkan arahan anda.
-      </p>
-      <p class="section-desc reveal reveal-delay-3" style="margin-top:-1rem">
-        Bayangkan ada pembantu peribadi yang boleh menulis surat rasmi, meringkaskan dokumen, menjana gambar, dan menjawab soalan — <strong style="color:var(--accent-yellow)">24/7 tanpa cuti.</strong>
-      </p>
-    </div>
-    <div class="reveal reveal-delay-2">
-      <div class="step-list">
-        <div class="step">
-          <div class="step-num">01</div>
-          <div>
-            <h4>Input → Arahan Anda</h4>
-            <p>Anda beri arahan (prompt) dalam bahasa biasa. Contoh: "Tolong buatkan surat iringan untuk permohonan cuti."</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">02</div>
-          <div>
-            <h4>Proses → AI Fikir</h4>
-            <p>AI memproses arahan anda menggunakan model bahasa yang dilatih dengan trilion data teks.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">03</div>
-          <div>
-            <h4>Output → Hasil Siap</h4>
-            <p>AI hasilkan jawapan, dokumen, imej, atau apa sahaja yang diminta — dalam beberapa saat.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+<!-- ============ SLIDE 2: LIVE POLL ============ -->
+<section id="poll">
+<div class="inner">
+  <div style="text-align:center;margin-bottom:2rem">
+    <div class="plb"><span class="pld"></span> LIVE · <span id="pc">0</span> jawapan</div>
+    <h2 class="pq" id="pqd">Apa yang anda tahu tentang AI?</h2>
+    <p style="font-size:.8rem;color:var(--t3);margin-top:.5rem">Audien scan QR → buka link dengan <code style="background:rgba(255,255,255,.08);padding:.15rem .4rem;border-radius:4px;font-size:.75rem">?mode=respond</code></p>
+  </div>
+  <div id="wc"></div>
+  <div id="lf" style="display:none"></div>
+  <div class="pc">
+    <button class="pb2 active" id="bc" onclick="showC()" style="background:rgba(66,133,244,.3);color:var(--blue)">☁️ Word Cloud</button>
+    <button class="pb2" id="bf" onclick="showF()" style="background:rgba(0,229,255,.1);color:var(--cyan)">📋 Live Feed</button>
+    <button class="pb2" onclick="resetP()" style="background:rgba(234,67,53,.08);color:var(--red)">🗑️ Reset</button>
   </div>
 </div>
 </section>
 
-<!-- =============================== -->
-<!-- SLIDE 3: KENAPA GEMINI? -->
-<!-- =============================== -->
+<!-- ============ SLIDE 3: APA ITU AI ============ -->
+<section id="apaitu">
+<div class="inner"><div class="tc"><div>
+  <div class="sl rv">PENGENALAN</div><div class="divider rv d1"></div>
+  <h2 class="st rv d1">Apa Itu<br><span style="color:var(--cyan)">Generatif AI?</span></h2>
+  <p class="sd rv d2">AI Generatif ialah teknologi kecerdasan buatan yang boleh menghasilkan teks, imej, video, muzik, dan pelbagai kandungan baharu — bukan sekadar menganalisis data sedia ada, tetapi <strong style="color:var(--t1)">mencipta sesuatu yang baru</strong> berdasarkan arahan anda.</p>
+  <p class="sd rv d3" style="margin-top:-1rem">Bayangkan ada pembantu peribadi yang boleh menulis surat rasmi, meringkaskan dokumen, menjana gambar, dan menjawab soalan — <strong style="color:var(--yellow)">24/7 tanpa cuti.</strong></p>
+</div><div class="rv d2"><div class="slist">
+  <div class="stp"><div class="sn">01</div><div><h4>Input → Arahan Anda</h4><p>Anda beri arahan (prompt) dalam bahasa biasa. Contoh: "Tolong buatkan surat iringan untuk permohonan cuti."</p></div></div>
+  <div class="stp"><div class="sn">02</div><div><h4>Proses → AI Fikir</h4><p>AI memproses arahan anda menggunakan model bahasa yang dilatih dengan trilion data teks.</p></div></div>
+  <div class="stp"><div class="sn">03</div><div><h4>Output → Hasil Siap</h4><p>AI hasilkan jawapan, dokumen, imej, atau apa sahaja yang diminta — dalam beberapa saat.</p></div></div>
+</div></div></div></div>
+</section>
+
+<!-- ============ SLIDE 4: KENAPA GEMINI ============ -->
 <section id="gemini">
-<div class="slide-inner">
-  <div class="section-label reveal">PLATFORM</div>
-  <div class="section-divider reveal reveal-delay-1"></div>
-  <h2 class="section-title reveal reveal-delay-1">Kenapa <span style="color:var(--accent-blue)">Gemini?</span></h2>
-  <p class="section-desc reveal reveal-delay-2">
-    Gemini ialah AI generatif oleh Google — dan berita baiknya, KKM sudah melanggan Gemini Pro. Semua kakitangan kerajaan dengan emel <strong style="color:var(--accent-green)">@moh.gov.my</strong> boleh akses secara <strong style="color:var(--accent-green)">PERCUMA</strong>.
-  </p>
-  <div class="cards-grid">
-    <div class="card reveal reveal-delay-1" data-accent="blue">
-      <div class="card-icon">🏛️</div>
-      <h3>Akses Percuma KKM</h3>
-      <p>Login dengan emel kerajaan @moh.gov.my — tiada kos tambahan. Langganan Gemini Pro sudah ditanggung KKM.</p>
-      <span class="tag">PERCUMA</span>
-    </div>
-    <div class="card reveal reveal-delay-2" data-accent="green">
-      <div class="card-icon">🔒</div>
-      <h3>Data Selamat</h3>
-      <p>Versi enterprise — data anda tidak digunakan untuk latihan model AI. Selamat untuk kegunaan kerja rasmi.</p>
-      <span class="tag">ENTERPRISE</span>
-    </div>
-    <div class="card reveal reveal-delay-3" data-accent="yellow">
-      <div class="card-icon">🌐</div>
-      <h3>Bahasa Melayu</h3>
-      <p>Gemini memahami arahan dalam Bahasa Melayu dengan baik — tiada halangan bahasa untuk kakitangan kita.</p>
-      <span class="tag">MULTILINGUA</span>
-    </div>
-    <div class="card reveal reveal-delay-4" data-accent="red">
-      <div class="card-icon">⚡</div>
-      <h3>Pelbagai Fungsi</h3>
-      <p>Bukan sekadar chatbot — ia boleh buat imej, video, muzik, deep research, dan banyak lagi dalam satu platform.</p>
-      <span class="tag">ALL-IN-ONE</span>
-    </div>
+<div class="inner">
+  <div class="sl rv">PLATFORM</div><div class="divider rv d1"></div>
+  <h2 class="st rv d1">Kenapa <span style="color:var(--blue)">Gemini?</span></h2>
+  <p class="sd rv d2">Gemini ialah AI generatif oleh Google — dan berita baiknya, KKM sudah melanggan Gemini Pro. Semua kakitangan kerajaan dengan emel <strong style="color:var(--green)">@moh.gov.my</strong> boleh akses secara <strong style="color:var(--green)">PERCUMA</strong>.</p>
+  <div class="cg">
+    <div class="c rv d1" data-a="b"><div class="ci">🏛️</div><h3>Akses Percuma KKM</h3><p>Login dengan emel kerajaan @moh.gov.my — tiada kos tambahan. Langganan Gemini Pro sudah ditanggung KKM.</p><span class="tag">PERCUMA</span></div>
+    <div class="c rv d2" data-a="g"><div class="ci">🔒</div><h3>Data Selamat</h3><p>Versi enterprise — data anda tidak digunakan untuk latihan model AI. Selamat untuk kegunaan kerja rasmi.</p><span class="tag">ENTERPRISE</span></div>
+    <div class="c rv d3" data-a="y"><div class="ci">🌐</div><h3>Bahasa Melayu</h3><p>Gemini memahami arahan dalam Bahasa Melayu dengan baik — tiada halangan bahasa untuk kakitangan kita.</p><span class="tag">MULTILINGUA</span></div>
+    <div class="c rv d4" data-a="r"><div class="ci">⚡</div><h3>Pelbagai Fungsi</h3><p>Bukan sekadar chatbot — ia boleh buat imej, video, muzik, deep research, dan banyak lagi dalam satu platform.</p><span class="tag">ALL-IN-ONE</span></div>
   </div>
 </div>
 </section>
 
-<!-- =============================== -->
-<!-- SLIDE 4: GEMINI TOOLS -->
-<!-- =============================== -->
+<!-- ============ SLIDE 5: GEMINI TOOLS ============ -->
 <section id="tools">
-<div class="slide-inner">
-  <div class="section-label reveal">FUNGSI GEMINI</div>
-  <div class="section-divider reveal reveal-delay-1"></div>
-  <h2 class="section-title reveal reveal-delay-1">6 Tools <span style="color:var(--accent-cyan)">Power</span> Dalam Gemini</h2>
-  <p class="section-desc reveal reveal-delay-2">
-    Setiap tool ini boleh membantu kerja harian Unit Pengurusan — dari menulis surat rasmi hingga membuat poster program.
-  </p>
-  <div class="cards-grid">
-
-    <div class="card reveal" data-accent="blue">
-      <div class="card-icon">🖼️</div>
-      <h3>Create Image</h3>
-      <p>Jana imej dari teks. Buat poster program, infografik kesihatan, atau visual untuk media sosial — tanpa perlu graphic designer.</p>
-      <span class="tag">VISUAL</span>
-    </div>
-
-    <div class="card reveal reveal-delay-1" data-accent="red">
-      <div class="card-icon">🎬</div>
-      <h3>Create Video</h3>
-      <p>Hasilkan klip video pendek secara automatik. Sesuai untuk video pendek promosi program kesihatan di media sosial.</p>
-      <span class="tag">VIDEO</span>
-    </div>
-
-    <div class="card reveal reveal-delay-2" data-accent="yellow">
-      <div class="card-icon">📝</div>
-      <h3>Canvas</h3>
-      <p>Ruang kolaboratif untuk menulis dan menyunting dokumen bersama AI — sesuai untuk draf surat rasmi, minit mesyuarat, dan laporan.</p>
-      <span class="tag">PENULISAN</span>
-    </div>
-
-    <div class="card reveal reveal-delay-3" data-accent="green">
-      <div class="card-icon">🔬</div>
-      <h3>Deep Research</h3>
-      <p>AI buat kajian mendalam secara automatik — ia cari, baca, dan rumuskan pelbagai sumber untuk anda. Jimat masa berjam-jam.</p>
-      <span class="tag">PENYELIDIKAN</span>
-    </div>
-
-    <div class="card reveal reveal-delay-4" data-accent="purple">
-      <div class="card-icon">🎵</div>
-      <h3>Create Music</h3>
-      <p>Jana muzik latar untuk video atau persembahan. Sesuai untuk background audio program kesihatan atau acara rasmi.</p>
-      <span class="tag">AUDIO</span>
-    </div>
-
-    <div class="card reveal reveal-delay-5" data-accent="cyan">
-      <div class="card-icon">📚</div>
-      <h3>Guided Learning</h3>
-      <p>Belajar topik baru secara interaktif dengan bimbingan AI — seperti ada tutor peribadi yang sabar dan sentiasa ada.</p>
-      <span class="tag">PEMBELAJARAN</span>
-    </div>
-
+<div class="inner">
+  <div class="sl rv">FUNGSI GEMINI</div><div class="divider rv d1"></div>
+  <h2 class="st rv d1">6 Tools <span style="color:var(--cyan)">Power</span> Dalam Gemini</h2>
+  <p class="sd rv d2">Setiap tool ini boleh membantu kerja harian Unit Pengurusan — dari menulis surat rasmi hingga membuat poster program.</p>
+  <div class="cg">
+    <div class="c rv" data-a="b"><div class="ci">🖼️</div><h3>Create Image</h3><p>Jana imej dari teks. Buat poster program, infografik kesihatan, atau visual untuk media sosial — tanpa perlu graphic designer.</p><span class="tag">VISUAL</span></div>
+    <div class="c rv d1" data-a="r"><div class="ci">🎬</div><h3>Create Video</h3><p>Hasilkan klip video pendek secara automatik. Sesuai untuk video pendek promosi program kesihatan di media sosial.</p><span class="tag">VIDEO</span></div>
+    <div class="c rv d2" data-a="y"><div class="ci">📝</div><h3>Canvas</h3><p>Ruang kolaboratif untuk menulis dan menyunting dokumen bersama AI — sesuai untuk draf surat rasmi, minit mesyuarat, dan laporan.</p><span class="tag">PENULISAN</span></div>
+    <div class="c rv d3" data-a="g"><div class="ci">🔬</div><h3>Deep Research</h3><p>AI buat kajian mendalam secara automatik — ia cari, baca, dan rumuskan pelbagai sumber untuk anda. Jimat masa berjam-jam.</p><span class="tag">PENYELIDIKAN</span></div>
+    <div class="c rv d4" data-a="p"><div class="ci">🎵</div><h3>Create Music</h3><p>Jana muzik latar untuk video atau persembahan. Sesuai untuk background audio program kesihatan atau acara rasmi.</p><span class="tag">AUDIO</span></div>
+    <div class="c rv d5" data-a="c"><div class="ci">📚</div><h3>Guided Learning</h3><p>Belajar topik baru secara interaktif dengan bimbingan AI — seperti ada tutor peribadi yang sabar dan sentiasa ada.</p><span class="tag">PEMBELAJARAN</span></div>
   </div>
 </div>
 </section>
 
-<!-- =============================== -->
-<!-- SLIDE 5: TEKNIK PROMPTING -->
-<!-- =============================== -->
+<!-- ============ SLIDE 6: PROMPTING ============ -->
 <section id="prompting">
-<div class="slide-inner">
-  <div class="two-col">
-    <div>
-      <div class="section-label reveal">KEMAHIRAN UTAMA</div>
-      <div class="section-divider reveal reveal-delay-1"></div>
-      <h2 class="section-title reveal reveal-delay-1">Seni <span style="color:var(--accent-yellow)">Prompting</span></h2>
-      <p class="section-desc reveal reveal-delay-2">
-        Kualiti output AI bergantung kepada kualiti arahan (prompt) anda. Ingat formula: <strong style="color:var(--text-primary)">Prompt Bagus = Hasil Bagus.</strong>
-      </p>
-      <div class="step-list reveal reveal-delay-3">
-        <div class="step">
-          <div class="step-num">R</div>
-          <div>
-            <h4>Role — Tetapkan Peranan</h4>
-            <p>"Anda adalah pegawai tadbir kanan yang berpengalaman di Jabatan Kesihatan."</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">T</div>
-          <div>
-            <h4>Task — Nyatakan Tugasan</h4>
-            <p>"Tolong draf surat makluman kepada semua klinik kesihatan tentang tarikh audit."</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">F</div>
-          <div>
-            <h4>Format — Tentukan Format</h4>
-            <p>"Gunakan format surat rasmi kerajaan dengan nombor rujukan dan tarikh."</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">C</div>
-          <div>
-            <h4>Context — Beri Konteks</h4>
-            <p>"Audit ini melibatkan 5 klinik di daerah Tumpat pada bulan Jun 2026."</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="reveal reveal-delay-2">
-      <div style="margin-bottom:1.5rem">
-        <h3 style="font-family:'Sora',sans-serif;font-size:1.1rem;margin-bottom:1rem;color:var(--accent-red)">❌ Prompt Lemah</h3>
-        <div class="prompt-box" style="border-color:rgba(234,67,53,0.2);background:rgba(234,67,53,0.04);color:rgba(234,67,53,0.7)">
-          "Buat surat untuk audit."
-        </div>
-      </div>
-      <div>
-        <h3 style="font-family:'Sora',sans-serif;font-size:1.1rem;margin-bottom:1rem;color:var(--accent-green)">✅ Prompt Mantap</h3>
-        <div class="prompt-box" style="border-color:rgba(52,168,83,0.2);background:rgba(52,168,83,0.04);color:rgba(52,168,83,0.8)">
-          "Anda adalah Pegawai Tadbir di PKD Tumpat. Sila draf surat makluman rasmi kepada semua Klinik Kesihatan di daerah Tumpat tentang audit tahunan yang akan diadakan pada 15-20 Jun 2026. Gunakan format surat rasmi kerajaan dengan nombor rujukan. Nada profesional dan sopan."
-        </div>
-      </div>
-      <div style="margin-top:2rem;padding:1rem 1.25rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px">
-        <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.6">
-          💡 <strong style="color:var(--text-primary)">Pro Tip:</strong> Semakin spesifik prompt anda, semakin tepat hasil AI. Bayangkan anda memberi arahan kepada staf baru — perlu jelas dan terperinci.
-        </p>
-      </div>
-    </div>
+<div class="inner"><div class="tc"><div>
+  <div class="sl rv">KEMAHIRAN UTAMA</div><div class="divider rv d1"></div>
+  <h2 class="st rv d1">Seni <span style="color:var(--yellow)">Prompting</span></h2>
+  <p class="sd rv d2">Kualiti output AI bergantung kepada kualiti arahan (prompt) anda. Ingat formula: <strong style="color:var(--t1)">Prompt Bagus = Hasil Bagus.</strong></p>
+  <div class="slist rv d3">
+    <div class="stp"><div class="sn">R</div><div><h4>Role — Tetapkan Peranan</h4><p>"Anda adalah pegawai tadbir kanan yang berpengalaman di Jabatan Kesihatan."</p></div></div>
+    <div class="stp"><div class="sn">T</div><div><h4>Task — Nyatakan Tugasan</h4><p>"Tolong draf surat makluman kepada semua klinik kesihatan tentang tarikh audit."</p></div></div>
+    <div class="stp"><div class="sn">F</div><div><h4>Format — Tentukan Format</h4><p>"Gunakan format surat rasmi kerajaan dengan nombor rujukan dan tarikh."</p></div></div>
+    <div class="stp"><div class="sn">C</div><div><h4>Context — Beri Konteks</h4><p>"Audit ini melibatkan 5 klinik di daerah Tumpat pada bulan Jun 2026."</p></div></div>
   </div>
-</div>
+</div><div class="rv d2">
+  <div style="margin-bottom:1.5rem">
+    <h3 style="font-family:'Sora',sans-serif;font-size:1.1rem;margin-bottom:1rem;color:var(--red)">❌ Prompt Lemah</h3>
+    <div class="pb" style="border-color:rgba(234,67,53,.2);background:rgba(234,67,53,.04);color:rgba(234,67,53,.7)">"Buat surat untuk audit."</div>
+  </div>
+  <div>
+    <h3 style="font-family:'Sora',sans-serif;font-size:1.1rem;margin-bottom:1rem;color:var(--green)">✅ Prompt Mantap</h3>
+    <div class="pb" style="border-color:rgba(52,168,83,.2);background:rgba(52,168,83,.04);color:rgba(52,168,83,.8)">"Anda adalah Pegawai Tadbir di PKD Tumpat. Sila draf surat makluman rasmi kepada semua Klinik Kesihatan di daerah Tumpat tentang audit tahunan yang akan diadakan pada 15-20 Jun 2026. Gunakan format surat rasmi kerajaan dengan nombor rujukan. Nada profesional dan sopan."</div>
+  </div>
+  <div style="margin-top:2rem;padding:1rem 1.25rem;background:var(--glass);border:1px solid var(--gb);border-radius:12px">
+    <p style="font-size:.82rem;color:var(--t2);line-height:1.6">💡 <strong style="color:var(--t1)">Pro Tip:</strong> Semakin spesifik prompt anda, semakin tepat hasil AI. Bayangkan anda memberi arahan kepada staf baru — perlu jelas dan terperinci.</p>
+  </div>
+</div></div></div>
 </section>
 
-<!-- =============================== -->
-<!-- SLIDE 6: GEMS -->
-<!-- =============================== -->
+<!-- ============ SLIDE 7: GEMS ============ -->
 <section id="gems">
-<div class="slide-inner">
-  <div class="section-label reveal">BONUS</div>
-  <div class="section-divider reveal reveal-delay-1"></div>
-  <h2 class="section-title reveal reveal-delay-1">
-    <span style="color:var(--accent-purple)">Gems</span> — AI Peribadi Anda
-  </h2>
-  <p class="section-desc reveal reveal-delay-2">
-    Gems ialah versi Gemini yang anda boleh <strong style="color:var(--text-primary)">sesuaikan</strong> untuk tugas tertentu. Buat sekali, guna berkali-kali. Ia seperti ada staf maya yang sudah tahu SOP kerja anda.
-  </p>
-
-  <div class="gems-showcase">
-    <div class="gem-card reveal">
-      <span class="gem-emoji">📋</span>
-      <h3>Gem: Penulis Surat Rasmi</h3>
-      <div class="gem-purpose">Untuk Unit Pentadbiran</div>
-      <p>Gem ini sudah di-set untuk menulis surat rasmi kerajaan — lengkap dengan format KKM, nombor rujukan, dan nada profesional. Cuma perlu bagi tajuk dan butiran ringkas.</p>
-    </div>
-    <div class="gem-card reveal reveal-delay-1">
-      <span class="gem-emoji">📊</span>
-      <h3>Gem: Pembantu Laporan</h3>
-      <div class="gem-purpose">Untuk Unit Kewangan & Pengurusan</div>
-      <p>Bantu menyusun data ke dalam format laporan — jadual, ringkasan eksekutif, dan rumusan. Sesuai untuk laporan bulanan aktiviti PKD.</p>
-    </div>
-    <div class="gem-card reveal reveal-delay-2">
-      <span class="gem-emoji">📅</span>
-      <h3>Gem: Perancang Mesyuarat</h3>
-      <div class="gem-purpose">Untuk Unit Pengurusan</div>
-      <p>Buat agenda mesyuarat, draf minit mesyuarat, dan senarai tindakan susulan secara automatik berdasarkan nota ringkas anda.</p>
-    </div>
-    <div class="gem-card reveal reveal-delay-3">
-      <span class="gem-emoji">📦</span>
-      <h3>Gem: Pengurusan Aset</h3>
-      <div class="gem-purpose">Untuk Unit Aset & Stor</div>
-      <p>Bantu menyediakan borang KEW.PA, senarai inventori, dan surat pelupusan aset mengikut prosedur kerajaan yang betul.</p>
-    </div>
+<div class="inner">
+  <div class="sl rv">BONUS</div><div class="divider rv d1"></div>
+  <h2 class="st rv d1"><span style="color:var(--purple)">Gems</span> — AI Peribadi Anda</h2>
+  <p class="sd rv d2">Gems ialah versi Gemini yang anda boleh <strong style="color:var(--t1)">sesuaikan</strong> untuk tugas tertentu. Buat sekali, guna berkali-kali. Ia seperti ada staf maya yang sudah tahu SOP kerja anda.</p>
+  <div class="gg">
+    <div class="gc rv"><span class="ge">📋</span><h3>Gem: Penulis Surat Rasmi</h3><div class="gp">Untuk Unit Pentadbiran</div><p>Gem ini sudah di-set untuk menulis surat rasmi kerajaan — lengkap dengan format KKM, nombor rujukan, dan nada profesional.</p></div>
+    <div class="gc rv d1"><span class="ge">📊</span><h3>Gem: Pembantu Laporan</h3><div class="gp">Untuk Unit Kewangan & Pengurusan</div><p>Bantu menyusun data ke dalam format laporan — jadual, ringkasan eksekutif, dan rumusan. Sesuai untuk laporan bulanan.</p></div>
+    <div class="gc rv d2"><span class="ge">📅</span><h3>Gem: Perancang Mesyuarat</h3><div class="gp">Untuk Unit Pengurusan</div><p>Buat agenda mesyuarat, draf minit mesyuarat, dan senarai tindakan susulan secara automatik.</p></div>
+    <div class="gc rv d3"><span class="ge">📦</span><h3>Gem: Pengurusan Aset</h3><div class="gp">Untuk Unit Aset & Stor</div><p>Bantu menyediakan borang KEW.PA, senarai inventori, dan surat pelupusan aset mengikut prosedur kerajaan.</p></div>
   </div>
+  <div class="rv d3" style="margin-top:2rem"><div class="pb">CARA BUAT GEM: Settings → Gems → New Gem → Masukkan arahan tetap (system prompt) → Simpan → Guna bila-bila masa!</div></div>
+</div>
+</section>
 
-  <div class="reveal reveal-delay-3" style="margin-top:2rem">
-    <div class="prompt-box">
-      CARA BUAT GEM: Settings → Gems → New Gem → Masukkan arahan tetap (system prompt) → Simpan → Guna bila-bila masa!
+<!-- ============ SLIDE 8: NOTEBOOKLM ============ -->
+<section id="nbklm">
+<div class="inner">
+  <div class="sl rv">ALAT KEDUA</div><div class="divider rv d1"></div>
+  <h2 class="st rv d1"><span style="color:var(--yellow)">NotebookLM</span> — AI Untuk Dokumen</h2>
+  <p class="sd rv d2">NotebookLM ialah alat Google yang boleh membaca, memahami, dan menjawab soalan berdasarkan dokumen anda sendiri. Upload SOP, pekeliling, atau mana-mana PDF — dan ia jadi pakar dalam dokumen tersebut.</p>
+  <div class="nf">
+    <div class="nc rv"><h3>📄 Upload Pelbagai Sumber</h3><p>Muat naik PDF, Google Docs, laman web, atau teks. NotebookLM baca dan fahami semuanya sebagai satu pangkalan pengetahuan.</p></div>
+    <div class="nc rv d1"><h3>💬 Tanya Soalan</h3><p>Tanya apa sahaja tentang dokumen anda — ia akan beri jawapan tepat dengan rujukan ke muka surat yang betul.</p></div>
+    <div class="nc rv d2"><h3>🎙️ Audio Overview</h3><p>Tukarkan dokumen kepada perbincangan audio gaya podcast — dengar ringkasan sambil memandu atau berehat!</p></div>
+    <div class="nc rv d3"><h3>📝 Jana Ringkasan</h3><p>Dapatkan ringkasan, FAQ, jadual perbandingan, atau garis masa dari dokumen secara automatik.</p></div>
+  </div>
+  <div class="rv d3" style="margin-top:2rem">
+    <div style="padding:1.25rem 1.5rem;background:var(--glass);border:1px solid var(--gb);border-radius:12px">
+      <p style="font-size:.85rem;color:var(--t2);line-height:1.7">💡 <strong style="color:var(--yellow)">Contoh Penggunaan PKD:</strong> Upload semua Pekeliling Perkhidmatan, Arahan Perbendaharaan, dan SOP kewangan ke dalam NotebookLM. Selepas itu, tanya sahaja: <em>"Apakah prosedur tuntutan perjalanan rasmi?"</em> — jawapan tepat dalam beberapa saat.</p>
     </div>
   </div>
 </div>
 </section>
 
-<!-- =============================== -->
-<!-- SLIDE 7: NOTEBOOKLM -->
-<!-- =============================== -->
-<section id="notebooklm">
-<div class="slide-inner">
-  <div class="section-label reveal">ALAT KEDUA</div>
-  <div class="section-divider reveal reveal-delay-1"></div>
-  <h2 class="section-title reveal reveal-delay-1">
-    <span style="color:var(--accent-yellow)">NotebookLM</span> — AI Untuk Dokumen
-  </h2>
-  <p class="section-desc reveal reveal-delay-2">
-    NotebookLM ialah alat Google yang boleh membaca, memahami, dan menjawab soalan berdasarkan dokumen anda sendiri. Upload SOP, pekeliling, atau mana-mana PDF — dan ia jadi pakar dalam dokumen tersebut.
-  </p>
-
-  <div class="nb-features">
-    <div class="nb-card reveal">
-      <h3>📄 Upload Pelbagai Sumber</h3>
-      <p>Muat naik PDF, Google Docs, laman web, atau teks. NotebookLM baca dan fahami semuanya sebagai satu pangkalan pengetahuan.</p>
-    </div>
-    <div class="nb-card reveal reveal-delay-1">
-      <h3>💬 Tanya Soalan</h3>
-      <p>Tanya apa sahaja tentang dokumen anda — ia akan beri jawapan tepat dengan rujukan ke muka surat yang betul.</p>
-    </div>
-    <div class="nb-card reveal reveal-delay-2">
-      <h3>🎙️ Audio Overview</h3>
-      <p>Tukarkan dokumen kepada perbincangan audio gaya podcast — dengar ringkasan sambil memandu atau berehat!</p>
-    </div>
-    <div class="nb-card reveal reveal-delay-3">
-      <h3>📝 Jana Ringkasan</h3>
-      <p>Dapatkan ringkasan, FAQ, jadual perbandingan, atau garis masa dari dokumen secara automatik.</p>
-    </div>
-  </div>
-
-  <div class="reveal reveal-delay-3" style="margin-top:2rem">
-    <div style="padding:1.25rem 1.5rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px">
-      <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.7">
-        💡 <strong style="color:var(--accent-yellow)">Contoh Penggunaan PKD:</strong> Upload semua Pekeliling Perkhidmatan, Arahan Perbendaharaan, dan SOP kewangan ke dalam NotebookLM. Selepas itu, tanya sahaja: <em>"Apakah prosedur tuntutan perjalanan rasmi?"</em> — jawapan tepat dalam beberapa saat.
-      </p>
-    </div>
-  </div>
-</div>
-</section>
-
-<!-- =============================== -->
-<!-- SLIDE 8: TIPS & ETIKA -->
-<!-- =============================== -->
+<!-- ============ SLIDE 9: TIPS ============ -->
 <section id="tips">
-<div class="slide-inner">
-  <div class="section-label reveal">PANDUAN</div>
-  <div class="section-divider reveal reveal-delay-1"></div>
-  <h2 class="section-title reveal reveal-delay-1">Tips & <span style="color:var(--accent-green)">Etika AI</span></h2>
-  <p class="section-desc reveal reveal-delay-2">
-    AI adalah alat — bukan pengganti. Gunakan dengan bijak dan bertanggungjawab.
-  </p>
-
-  <div class="tips-grid">
-    <div class="tip reveal">
-      <span class="tip-icon">✅</span>
-      <h4>Semak Semula</h4>
-      <p>Sentiasa semak output AI sebelum guna. AI boleh buat kesilapan — terutama fakta dan angka. Anda tetap bertanggungjawab.</p>
-    </div>
-    <div class="tip reveal reveal-delay-1">
-      <span class="tip-icon">🔐</span>
-      <h4>Jaga Kerahsiaan</h4>
-      <p>Jangan masukkan data pesakit, nombor IC, atau maklumat sulit ke dalam mana-mana AI. Gunakan data am sahaja.</p>
-    </div>
-    <div class="tip reveal reveal-delay-2">
-      <span class="tip-icon">🔄</span>
-      <h4>Iterasi & Perbaiki</h4>
-      <p>Jika hasil pertama tak memuaskan, perbaiki prompt anda. AI belajar dari konteks — beri maklum balas dan cuba lagi.</p>
-    </div>
-    <div class="tip reveal reveal-delay-3">
-      <span class="tip-icon">🧠</span>
-      <h4>AI = Pembantu</h4>
-      <p>AI bukan pengganti pemikiran kritikal anda. Gunakan ia untuk mempercepatkan kerja, bukan untuk menggantikan pertimbangan profesional.</p>
-    </div>
-    <div class="tip reveal reveal-delay-4">
-      <span class="tip-icon">📱</span>
-      <h4>Mula Kecil</h4>
-      <p>Tak perlu kuasai semua sekali gus. Mulakan dengan satu tugasan harian — contoh: draf emel atau ringkasan dokumen.</p>
-    </div>
-    <div class="tip reveal reveal-delay-5">
-      <span class="tip-icon">👥</span>
-      <h4>Kongsi Ilmu</h4>
-      <p>Jika anda jumpa cara guna AI yang berguna, kongsikan dengan rakan sekerja. Budaya inovasi bermula dari kita.</p>
-    </div>
+<div class="inner">
+  <div class="sl rv">PANDUAN</div><div class="divider rv d1"></div>
+  <h2 class="st rv d1">Tips & <span style="color:var(--green)">Etika AI</span></h2>
+  <p class="sd rv d2">AI adalah alat — bukan pengganti. Gunakan dengan bijak dan bertanggungjawab.</p>
+  <div class="tg">
+    <div class="tp rv"><span class="tpi">✅</span><h4>Semak Semula</h4><p>Sentiasa semak output AI sebelum guna. AI boleh buat kesilapan — terutama fakta dan angka.</p></div>
+    <div class="tp rv d1"><span class="tpi">🔐</span><h4>Jaga Kerahsiaan</h4><p>Jangan masukkan data pesakit, nombor IC, atau maklumat sulit ke dalam mana-mana AI.</p></div>
+    <div class="tp rv d2"><span class="tpi">🔄</span><h4>Iterasi & Perbaiki</h4><p>Jika hasil pertama tak memuaskan, perbaiki prompt anda. Beri maklum balas dan cuba lagi.</p></div>
+    <div class="tp rv d3"><span class="tpi">🧠</span><h4>AI = Pembantu</h4><p>AI bukan pengganti pemikiran kritikal anda. Gunakan untuk mempercepatkan kerja sahaja.</p></div>
+    <div class="tp rv d4"><span class="tpi">📱</span><h4>Mula Kecil</h4><p>Mulakan dengan satu tugasan harian — contoh: draf emel atau ringkasan dokumen.</p></div>
+    <div class="tp rv d5"><span class="tpi">👥</span><h4>Kongsi Ilmu</h4><p>Jika anda jumpa cara guna AI yang berguna, kongsikan dengan rakan sekerja.</p></div>
   </div>
 </div>
 </section>
 
-<!-- =============================== -->
-<!-- SLIDE 9: PENUTUP -->
-<!-- =============================== -->
-<section id="penutup" class="footer-slide">
-<div class="slide-inner" style="display:flex;flex-direction:column;align-items:center">
-  <div class="section-label reveal">TERIMA KASIH</div>
-  <div class="section-divider reveal reveal-delay-1" style="margin-left:auto;margin-right:auto"></div>
-  <h2 class="big-text reveal reveal-delay-1">
-    <span class="gradient-text" style="background:linear-gradient(135deg,var(--accent-blue),var(--accent-green),var(--accent-yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Masa Untuk<br>Hands-On!</span>
-  </h2>
-  <p class="section-desc reveal reveal-delay-2" style="text-align:center;max-width:600px">
-    Jom praktikkan apa yang kita belajar hari ini. Buka Gemini di browser anda, login dengan emel kerajaan, dan mula meneroka.
-  </p>
-
-  <div class="reveal reveal-delay-3" style="margin-top:1.5rem;padding:2rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;text-align:center">
-    <p style="font-family:'Sora',sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:0.5rem">Dr. Muhammad Ruhaifi bin Muhammad Sabri</p>
-    <p style="font-size:0.85rem;color:var(--accent-cyan);font-weight:500;margin-bottom:0.3rem">Gemini Certified Educator</p>
-    <p style="font-size:0.8rem;color:var(--text-dim)">Pegawai Perubatan (UD13) · PKD Tumpat, Kelantan</p>
+<!-- ============ SLIDE 10: PENUTUP ============ -->
+<section id="end" class="fs">
+<div class="inner" style="display:flex;flex-direction:column;align-items:center">
+  <div class="sl rv">TERIMA KASIH</div>
+  <div class="divider rv d1" style="margin-left:auto;margin-right:auto"></div>
+  <h2 class="bt rv d1"><span class="grad" style="background:linear-gradient(135deg,var(--blue),var(--green),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Masa Untuk<br>Hands-On!</span></h2>
+  <p class="sd rv d2" style="text-align:center;max-width:600px">Jom praktikkan apa yang kita belajar hari ini. Buka Gemini di browser anda, login dengan emel kerajaan, dan mula meneroka.</p>
+  <div class="rv d3" style="margin-top:1.5rem;padding:2rem;background:var(--glass);border:1px solid var(--gb);border-radius:20px;text-align:center">
+    <p style="font-family:'Sora',sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:.5rem">Dr. Muhammad Ruhaifi bin Muhammad Sabri</p>
+    <p style="font-size:.85rem;color:var(--cyan);font-weight:500;margin-bottom:.3rem">Gemini Certified Educator</p>
+    <p style="font-size:.8rem;color:var(--t3)">Pegawai Perubatan (UD41) · PKD Tumpat, Kelantan</p>
   </div>
-
-  <div class="footer-contact reveal reveal-delay-4">
-    <div class="contact-item">
-      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-      gemini.google.com
-    </div>
-    <div class="contact-item">
-      <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-      notebooklm.google.com
-    </div>
+  <div class="fc rv d4">
+    <div class="ci2"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>gemini.google.com</div>
+    <div class="ci2"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>notebooklm.google.com</div>
   </div>
-
-  <p class="reveal reveal-delay-5" style="margin-top:2.5rem;font-size:0.7rem;color:var(--text-dim);font-family:'Space Mono',monospace;letter-spacing:0.05em">
-    © 2026 · Slide ini boleh diakses secara interaktif melalui GitHub Pages
-  </p>
+  <p class="rv d5" style="margin-top:2.5rem;font-size:.7rem;color:var(--t3);font-family:'Space Mono',monospace;letter-spacing:.05em">© 2026 · Slide ini boleh diakses secara interaktif melalui GitHub Pages</p>
 </div>
 </section>
 
-<!-- KEYBOARD NAV HINT -->
-<div class="key-hint">
-  <div class="key-btn">←</div>
-  <div class="key-btn">→</div>
-</div>
+<div class="kh"><div class="kb">←</div><div class="kb">→</div></div>
 
 <script>
-// ===== PARTICLES =====
-(function(){
-const c=document.getElementById('particles');
-const colors=['rgba(66,133,244,0.4)','rgba(234,67,53,0.3)','rgba(251,188,4,0.35)','rgba(52,168,83,0.35)','rgba(0,229,255,0.3)'];
-for(let i=0;i<30;i++){
-  const p=document.createElement('div');
-  p.className='particle';
-  const s=Math.random()*3+1;
-  p.style.cssText=`
-    width:${s}px;height:${s}px;
-    left:${Math.random()*100}%;
-    background:${colors[Math.floor(Math.random()*colors.length)]};
-    animation-duration:${Math.random()*15+10}s;
-    animation-delay:${Math.random()*10}s;
-  `;
-  c.appendChild(p);
+// ============ FIREBASE ============
+const firebaseConfig = {
+  apiKey: "AIzaSyCF2wqvEYoDsvmF3ydi2iuYwy7jfb_aK2w",
+  authDomain: "qa-cloud-b2392.firebaseapp.com",
+  databaseURL: "https://qa-cloud-b2392-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "qa-cloud-b2392",
+  storageBucket: "qa-cloud-b2392.firebasestorage.app",
+  messagingSenderId: "748949912467",
+  appId: "1:748949912467:web:eb85010fa7d48648740666"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const pollRef = db.ref('poll');
+
+// ============ COLORS ============
+const CL=['#4285f4','#ea4335','#fbbc04','#34a853','#00e5ff','#a855f7','#ff6b6b','#ffd93d','#6bcb77','#4d96ff'];
+function hc(s){let h=0;for(let i=0;i<s.length;i++)h=((h<<5)-h+s.charCodeAt(i))|0;return CL[Math.abs(h)%CL.length]}
+
+// ============ STOP WORDS ============
+const SW=new Set('yang dan di itu ini adalah untuk dengan tidak ada dari ke saya boleh akan pada juga atau ia kita apa tentang macam seperti tak bukan per bagi oleh ialah telah sudah sedang masih belum lagi pun pula sahaja hanya jika kalau maka tetapi namun walau bagaimana bila mana the a an is it and of to in that can but have has been was are were be do does did could would should may might shall will got get its let very just even well only then than too also how when where what why who which each all some any more most much many few both other another such same so no nor not own our my your his her'.split(' '));
+
+// ============ WORD CLOUD ============
+function buildWC(resps){
+  const f={};
+  resps.forEach(r=>{
+    r.text.toLowerCase().replace(/[^a-zA-Z0-9\u00C0-\u024F\s]/g,'').split(/\s+/)
+    .filter(w=>w.length>2&&!SW.has(w)).forEach(w=>{f[w]=(f[w]||0)+1});
+  });
+  return Object.entries(f).map(([t,c])=>({t,c})).sort((a,b)=>b.c-a.c).slice(0,60);
 }
+function renderWC(words){
+  const el=document.getElementById('wc');
+  if(!words.length){el.innerHTML='';return}
+  const mx=Math.max(...words.map(w=>w.c),1);
+  el.innerHTML=words.map((w,i)=>{
+    const r=w.c/mx,sz=1+r*3.5,fw=r>.5?800:r>.25?600:400,op=.5+r*.5;
+    return`<span class="ww" style="font-size:${sz}rem;font-weight:${fw};color:${hc(w.t)};opacity:${op};animation-delay:${i*.03}s">${w.t}</span>`;
+  }).join('');
+}
+function renderFeed(resps){
+  const el=document.getElementById('lf');
+  if(!resps.length){el.innerHTML='<div style="text-align:center;color:var(--t3);padding:3rem;font-size:.9rem">Menunggu jawapan daripada audien...</div>';return}
+  el.innerHTML=resps.slice().reverse().map((r,i)=>`
+    <div class="fi" style="animation-delay:${i*.04}s">
+      <div class="fa" style="background:linear-gradient(135deg,${hc(r.text)},${hc(r.text+'x')})">${(r.name||'?').charAt(0).toUpperCase()}</div>
+      <div><div class="fm">${r.name||'Anonim'} · ${r.time||''}</div><div class="ft">${r.text}</div></div>
+    </div>`).join('');
+}
+function refresh(resps){
+  document.getElementById('pc').textContent=resps.length;
+  renderWC(buildWC(resps));
+  renderFeed(resps);
+}
+
+// ============ FIREBASE LISTENER ============
+pollRef.child('responses').on('value',snap=>{
+  const d=snap.val();refresh(d?Object.values(d):[]);
+});
+
+// ============ VIEW TOGGLE ============
+let cv='cloud';
+function showC(){cv='cloud';document.getElementById('wc').style.display='flex';document.getElementById('lf').style.display='none';document.getElementById('bc').style.background='rgba(66,133,244,.3)';document.getElementById('bf').style.background='rgba(0,229,255,.1)'}
+function showF(){cv='feed';document.getElementById('wc').style.display='none';document.getElementById('lf').style.display='flex';document.getElementById('bf').style.background='rgba(0,229,255,.25)';document.getElementById('bc').style.background='rgba(66,133,244,.15)'}
+
+// ============ SUBMIT ============
+function submitR(){
+  const name=document.getElementById('an').value.trim()||'Anonim';
+  const text=document.getElementById('aa').value.trim();
+  if(!text)return;
+  pollRef.child('responses').push({
+    name,text,
+    time:new Date().toLocaleTimeString('ms-MY',{hour:'2-digit',minute:'2-digit'}),
+    ts:Date.now()
+  });
+  document.getElementById('af').style.display='none';
+  document.getElementById('as').style.display='block';
+}
+function resetAF(){
+  document.getElementById('an').value='';document.getElementById('aa').value='';
+  document.getElementById('ab').disabled=true;
+  document.getElementById('af').style.display='block';document.getElementById('as').style.display='none';
+}
+document.getElementById('aa').addEventListener('input',function(){document.getElementById('ab').disabled=!this.value.trim()});
+
+// ============ RESET POLL ============
+function resetP(){if(!confirm('Reset semua jawapan?'))return;pollRef.child('responses').remove();refresh([])}
+
+// ============ MODE DETECT ============
+(function(){
+  const p=new URLSearchParams(window.location.search);
+  if(p.get('mode')==='respond'){
+    document.getElementById('ap').style.display='flex';
+    document.getElementById('nav').style.display='none';
+    document.querySelector('.particles').style.display='none';
+    document.querySelectorAll('section').forEach(s=>s.style.display='none');
+    document.querySelector('.kh').style.display='none';
+    // Load question
+    pollRef.child('question').on('value',snap=>{const q=snap.val();if(q)document.getElementById('aq').textContent=q});
+  }
 })();
 
-// ===== SCROLL REVEAL =====
-const reveals=document.querySelectorAll('.reveal');
-const observer=new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}});
-},{threshold:0.15,rootMargin:'0px 0px -50px 0px'});
-reveals.forEach(r=>observer.observe(r));
+// ============ PARTICLES ============
+(function(){
+  const c=document.getElementById('particles');if(!c)return;
+  const cl=['rgba(66,133,244,.4)','rgba(234,67,53,.3)','rgba(251,188,4,.35)','rgba(52,168,83,.35)','rgba(0,229,255,.3)'];
+  for(let i=0;i<30;i++){const p=document.createElement('div');p.className='particle';const s=Math.random()*3+1;p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;background:${cl[Math.floor(Math.random()*cl.length)]};animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*10}s`;c.appendChild(p)}
+})();
 
-// ===== NAV ACTIVE STATE =====
-const sections=document.querySelectorAll('section');
-const navLinks=document.querySelectorAll('.nav-link');
-const progressBar=document.getElementById('progress');
+// ============ SCROLL REVEAL ============
+const rvs=document.querySelectorAll('.rv');
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}})},{threshold:.15,rootMargin:'0px 0px -50px 0px'});
+rvs.forEach(r=>obs.observe(r));
 
+// ============ NAV ============
+const secs=document.querySelectorAll('section');
+const nls=document.querySelectorAll('.nav-link');
+const prog=document.getElementById('prog');
 window.addEventListener('scroll',()=>{
-  const scrollPos=window.scrollY+200;
-  sections.forEach((s,i)=>{
-    if(scrollPos>=s.offsetTop&&scrollPos<s.offsetTop+s.offsetHeight){
-      navLinks.forEach(l=>l.classList.remove('active'));
-      navLinks[i]&&navLinks[i].classList.add('active');
-    }
-  });
-  // Progress bar
-  const total=document.documentElement.scrollHeight-window.innerHeight;
-  const pct=(window.scrollY/total)*100;
-  progressBar.style.width=pct+'%';
+  const sp=window.scrollY+200;
+  secs.forEach((s,i)=>{if(sp>=s.offsetTop&&sp<s.offsetTop+s.offsetHeight){nls.forEach(l=>l.classList.remove('active'));nls[i]&&nls[i].classList.add('active')}});
+  const t=document.documentElement.scrollHeight-window.innerHeight;
+  prog.style.width=(window.scrollY/t)*100+'%';
 });
 
-// ===== KEYBOARD NAVIGATION =====
-const sectionIds=[...sections].map(s=>s.id);
-let currentSlide=0;
-document.addEventListener('keydown',(e)=>{
-  if(e.key==='ArrowRight'||e.key==='ArrowDown'){
-    e.preventDefault();
-    currentSlide=Math.min(currentSlide+1,sectionIds.length-1);
-    document.getElementById(sectionIds[currentSlide]).scrollIntoView({behavior:'smooth'});
-  }
-  if(e.key==='ArrowLeft'||e.key==='ArrowUp'){
-    e.preventDefault();
-    currentSlide=Math.max(currentSlide-1,0);
-    document.getElementById(sectionIds[currentSlide]).scrollIntoView({behavior:'smooth'});
-  }
+// ============ KEYBOARD NAV ============
+const sids=[...secs].map(s=>s.id);let cs=0;
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();cs=Math.min(cs+1,sids.length-1);document.getElementById(sids[cs]).scrollIntoView({behavior:'smooth'})}
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();cs=Math.max(cs-1,0);document.getElementById(sids[cs]).scrollIntoView({behavior:'smooth'})}
 });
-
-// Update currentSlide on scroll
-window.addEventListener('scroll',()=>{
-  const scrollPos=window.scrollY+window.innerHeight/2;
-  sections.forEach((s,i)=>{
-    if(scrollPos>=s.offsetTop&&scrollPos<s.offsetTop+s.offsetHeight){currentSlide=i}
-  });
-});
-
-// ===== SMOOTH NAV CLICK =====
-navLinks.forEach(link=>{
-  link.addEventListener('click',(e)=>{
-    e.preventDefault();
-    const target=document.querySelector(link.getAttribute('href'));
-    if(target)target.scrollIntoView({behavior:'smooth'});
-  });
-});
+window.addEventListener('scroll',()=>{const sp=window.scrollY+window.innerHeight/2;secs.forEach((s,i)=>{if(sp>=s.offsetTop&&sp<s.offsetTop+s.offsetHeight)cs=i})});
+nls.forEach(l=>{l.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(l.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})});
 </script>
 </body>
 </html>
