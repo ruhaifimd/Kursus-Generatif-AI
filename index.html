@@ -20,25 +20,17 @@
 html{scroll-behavior:smooth;overflow-x:hidden}
 body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(66,133,244,.08),transparent),radial-gradient(ellipse 60% 50% at 80% 90%,rgba(234,67,53,.06),transparent),radial-gradient(ellipse 50% 40% at 50% 50%,rgba(251,188,4,.04),transparent);pointer-events:none;z-index:0}
-
-/* Particles */
 .particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .particle{position:absolute;border-radius:50%;animation:floatUp linear infinite;opacity:0}
 @keyframes floatUp{0%{transform:translateY(110vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) scale(1);opacity:0}}
-
-/* Nav */
 nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(6,6,15,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--gb);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px}
 .nav-brand{font-family:'Sora',sans-serif;font-weight:700;font-size:.95rem;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .nav-links{display:flex;gap:.25rem;align-items:center;overflow-x:auto;max-width:72%}.nav-links::-webkit-scrollbar{display:none}
 .nav-link{font-size:.7rem;padding:.35rem .65rem;border-radius:6px;color:var(--t2);text-decoration:none;white-space:nowrap;transition:all .2s;font-weight:500}
 .nav-link:hover,.nav-link.active{color:var(--t1);background:var(--glass)}
 .nav-progress{position:absolute;bottom:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--red),var(--yellow),var(--green));transition:width .3s}
-
-/* Sections */
 section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;padding:5rem 2rem 3rem}
 .inner{max-width:1100px;width:100%;margin:0 auto}
-
-/* Hero */
 .hero{text-align:center}
 .hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1.2rem;border-radius:100px;background:var(--glass);border:1px solid var(--gb);font-size:.8rem;color:var(--cyan);font-weight:500;margin-bottom:2rem;animation:fadeInDown .8s ease both}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
@@ -59,14 +51,10 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 .scroll-hint svg{width:20px;height:20px;stroke:var(--t3);fill:none;stroke-width:1.5}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
-
-/* Section common */
 .sl{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.15em;color:var(--cyan);text-transform:uppercase;margin-bottom:.75rem}
 .st{font-family:'Sora',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:1rem}
 .sd{font-size:1rem;color:var(--t2);line-height:1.7;max-width:700px;margin-bottom:2.5rem;font-weight:300}
 .divider{width:60px;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:3px;margin-bottom:2rem}
-
-/* Cards */
 .cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem}
 .c{background:var(--card);border:1px solid var(--gb);border-radius:16px;padding:1.75rem;transition:all .35s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
 .c::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--ca,var(--blue)),transparent);opacity:0;transition:opacity .3s}
@@ -82,19 +70,13 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 .c[data-a="g"]{--ca:var(--green)}.c[data-a="g"] .ci{background:rgba(52,168,83,.12)}.c[data-a="g"] .tag{background:rgba(52,168,83,.15);color:var(--green)}
 .c[data-a="c"]{--ca:var(--cyan)}.c[data-a="c"] .ci{background:rgba(0,229,255,.12)}.c[data-a="c"] .tag{background:rgba(0,229,255,.15);color:var(--cyan)}
 .c[data-a="p"]{--ca:var(--purple)}.c[data-a="p"] .ci{background:rgba(168,85,247,.12)}.c[data-a="p"] .tag{background:rgba(168,85,247,.15);color:var(--purple)}
-
-/* Two col */
 .tc{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
-
-/* Steps */
 .slist{display:flex;flex-direction:column;gap:1.25rem}
 .stp{display:flex;gap:1rem;align-items:flex-start;padding:1.25rem;background:var(--card);border:1px solid var(--gb);border-radius:12px;transition:all .3s}
 .stp:hover{background:var(--card-h);border-color:rgba(255,255,255,.12)}
 .sn{font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;color:var(--cyan);min-width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,229,255,.3);border-radius:8px;flex-shrink:0;margin-top:.1rem}
 .stp h4{font-size:.95rem;font-weight:600;margin-bottom:.25rem}
 .stp p{font-size:.8rem;color:var(--t2);line-height:1.5;font-weight:300}
-
-/* Gems */
 .gg{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
 .gc{background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(66,133,244,.05));border:1px solid rgba(168,85,247,.15);border-radius:16px;padding:1.5rem;transition:all .35s}
 .gc:hover{transform:translateY(-3px);box-shadow:0 0 40px rgba(168,85,247,.15);border-color:rgba(168,85,247,.3)}
@@ -102,34 +84,24 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 .gc h3{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.4rem}
 .gc .gp{font-size:.8rem;color:var(--purple);font-weight:500;margin-bottom:.5rem}
 .gc p{font-size:.78rem;color:var(--t2);line-height:1.55}
-
-/* Prompt box */
 .pb{background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.12);border-radius:12px;padding:1.25rem 1.5rem;margin-top:1rem;font-family:'Space Mono',monospace;font-size:.78rem;color:var(--cyan);line-height:1.7;position:relative}
 .pb::before{content:'PROMPT';position:absolute;top:-.5rem;left:1rem;background:var(--bg);padding:0 .5rem;font-size:.6rem;letter-spacing:.1em;color:var(--t3)}
-
-/* NotebookLM */
 .nf{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem}
 .nc{background:linear-gradient(135deg,rgba(251,188,4,.06),rgba(234,67,53,.04));border:1px solid rgba(251,188,4,.12);border-radius:16px;padding:1.75rem;transition:all .35s}
 .nc:hover{transform:translateY(-3px);box-shadow:0 0 40px rgba(251,188,4,.12);border-color:rgba(251,188,4,.25)}
 .nc h3{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.5rem}
 .nc p{font-size:.82rem;color:var(--t2);line-height:1.6}
-
-/* Tips */
 .tg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
 .tp{padding:1.5rem;background:var(--card);border:1px solid var(--gb);border-radius:14px;transition:all .3s}
 .tp:hover{background:var(--card-h)}
 .tp .tpi{font-size:1.5rem;margin-bottom:.75rem;display:block}
 .tp h4{font-size:.95rem;font-weight:600;margin-bottom:.4rem}
 .tp p{font-size:.8rem;color:var(--t2);line-height:1.55}
-
-/* Footer */
 .fs{text-align:center}
 .fs .bt{font-family:'Sora',sans-serif;font-size:clamp(2rem,5vw,4rem);font-weight:900;letter-spacing:-.03em;margin-bottom:1.5rem}
 .fc{display:flex;flex-wrap:wrap;justify-content:center;gap:1.5rem;margin-top:2rem}
 .ci2{display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--t2)}
 .ci2 svg{width:18px;height:18px;stroke:var(--cyan);fill:none;stroke-width:1.5}
-
-/* Reveal */
 .rv{opacity:0;transform:translateY(40px);transition:all .8s cubic-bezier(.4,0,.2,1)}
 .rv.vis{opacity:1;transform:translateY(0)}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}
@@ -137,8 +109,28 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 /* ===== LIVE POLL ===== */
 .plb{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .8rem;border-radius:100px;background:rgba(52,168,83,.1);border:1px solid rgba(52,168,83,.2);font-size:.7rem;color:var(--green);font-weight:600;letter-spacing:.05em}
 .pld{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-.pq{font-family:'Sora',sans-serif;font-size:clamp(1.5rem,4vw,2.5rem);font-weight:800;color:var(--t1);line-height:1.2;margin:.75rem 0}
-#wc{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.5rem;padding:2rem;min-height:320px;background:rgba(255,255,255,.015);border:1px solid var(--gb);border-radius:20px}
+
+/* Editable Question */
+.pq-display{font-family:'Sora',sans-serif;font-size:clamp(1.5rem,4vw,2.5rem);font-weight:800;color:var(--t1);line-height:1.2;margin:.75rem 0;cursor:pointer;padding:.5rem .75rem;border-radius:12px;border:2px solid transparent;transition:all .3s}
+.pq-display:hover{border-color:rgba(66,133,244,.3);background:rgba(66,133,244,.05)}
+.pq-edit-hint{font-size:.7rem;color:var(--t3);margin-top:.25rem;opacity:0;transition:opacity .3s}
+.pq-display:hover+.pq-edit-hint{opacity:1}
+.pq-editor{display:none;margin:.75rem auto;max-width:700px;width:100%}
+.pq-editor.active{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;justify-content:center}
+.pq-input{flex:1;min-width:250px;padding:.8rem 1.2rem;border-radius:12px;background:rgba(255,255,255,.06);border:2px solid rgba(66,133,244,.4);color:var(--t1);font-size:1.1rem;font-family:'Sora',sans-serif;font-weight:700;outline:none;text-align:center;transition:border-color .3s}
+.pq-input:focus{border-color:var(--cyan)}
+.pq-input::placeholder{color:var(--t3);font-weight:400}
+.pq-save{padding:.7rem 1.5rem;border-radius:10px;border:none;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Sora',sans-serif;transition:all .3s;white-space:nowrap}
+.pq-save:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(66,133,244,.4)}
+.pq-cancel{padding:.7rem 1rem;border-radius:10px;border:1px solid var(--gb);background:var(--glass);color:var(--t2);font-size:.85rem;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif}
+/* Toast */
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);padding:.6rem 1.5rem;border-radius:10px;font-size:.85rem;font-weight:600;z-index:9999;opacity:0;transition:all .4s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast-ok{background:rgba(52,168,83,.9);color:#fff}
+.toast-info{background:rgba(66,133,244,.9);color:#fff}
+
+#wc{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.5rem;padding:2rem;min-height:320px;background:rgba(255,255,255,.015);border:1px solid var(--gb);border-radius:20px;transition:all .5s}
+#wc.empty-state{justify-content:center;align-items:center}
 #wc:empty::after{content:'Menunggu jawapan daripada audien...';color:var(--t3);font-size:.9rem}
 .ww{display:inline-block;padding:.1rem .35rem;transition:all .5s;cursor:default;line-height:1.3;animation:wp .4s ease both}
 @keyframes wp{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
@@ -149,23 +141,26 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 .fa{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;color:#fff;flex-shrink:0}
 .fm{font-size:.72rem;color:var(--t3);margin-bottom:.15rem}
 .ft{font-size:.88rem;color:var(--t1);line-height:1.4;word-break:break-word}
-.pc{display:flex;justify-content:center;gap:.5rem;margin-top:1.5rem;flex-wrap:wrap}
-.pb2{padding:.5rem 1rem;border-radius:10px;border:none;font-size:.75rem;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s}
+.poll-ctrls{display:flex;justify-content:center;gap:.5rem;margin-top:1.5rem;flex-wrap:wrap}
+.pbtn{padding:.5rem 1rem;border-radius:10px;border:none;font-size:.75rem;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s}
 
 /* Audience page */
 .ap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:1.5rem;position:fixed;inset:0;z-index:9999}
 .ap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 30%,rgba(66,133,244,.1),transparent);pointer-events:none}
 .ac{width:100%;max-width:480px;position:relative;z-index:1}
-.ac h1{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:800;color:var(--t1);line-height:1.2;margin-bottom:.5rem;text-align:center}
+.ac h1{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:800;color:var(--t1);line-height:1.2;margin-bottom:.5rem;text-align:center;transition:all .3s}
 .asub{font-size:.8rem;color:var(--t3);text-align:center;margin-bottom:2rem}
 .al{font-size:.75rem;color:var(--t3);margin-bottom:.35rem;display:block;font-weight:500}
-.ai,.at{width:100%;padding:.8rem 1rem;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--t1);font-size:.95rem;outline:none;font-family:'Outfit',sans-serif;transition:border-color .2s}
-.ai:focus,.at:focus{border-color:rgba(0,229,255,.3)}
-.at{resize:vertical;line-height:1.5}
+.ai,.at2{width:100%;padding:.8rem 1rem;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--t1);font-size:.95rem;outline:none;font-family:'Outfit',sans-serif;transition:border-color .2s}
+.ai:focus,.at2:focus{border-color:rgba(0,229,255,.3)}
+.at2{resize:vertical;line-height:1.5}
 .abtn{width:100%;padding:.85rem;border-radius:12px;border:none;background:linear-gradient(135deg,#4285f4,#00e5ff);color:#fff;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Sora',sans-serif;transition:all .3s}
 .abtn:disabled{background:rgba(255,255,255,.06);color:var(--t3);cursor:default}
 .sp{text-align:center}.sp .ej{font-size:4rem;margin-bottom:1rem}.sp h2{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:700;margin-bottom:.75rem}.sp p{font-size:.9rem;color:var(--t2);line-height:1.6;margin-bottom:1.5rem}
 .aag{padding:.7rem 1.5rem;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--cyan);font-size:.85rem;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif}
+/* Question update notification for audience */
+.q-update{position:fixed;top:0;left:0;right:0;padding:.8rem;background:linear-gradient(135deg,rgba(66,133,244,.9),rgba(0,229,255,.9));color:#fff;text-align:center;font-size:.85rem;font-weight:600;z-index:99999;transform:translateY(-100%);transition:transform .4s;font-family:'Sora',sans-serif}
+.q-update.show{transform:translateY(0)}
 .kh{position:fixed;bottom:1.5rem;right:1.5rem;display:flex;gap:.4rem;align-items:center;z-index:999;opacity:.4;transition:opacity .3s}.kh:hover{opacity:.8}
 .kb{width:32px;height:32px;border-radius:8px;background:var(--glass);border:1px solid var(--gb);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--t2);font-family:'Space Mono',monospace}
 @media(max-width:768px){.tc{grid-template-columns:1fr;gap:2rem}.kh{display:none}}
@@ -174,29 +169,32 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 </head>
 <body>
 
-<!-- ===== AUDIENCE RESPONSE PAGE ===== -->
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- AUDIENCE PAGE -->
 <div class="ap" id="ap" style="display:none">
+  <div class="q-update" id="q-upd">Soalan baru telah dikemaskini!</div>
   <div class="ac" id="af">
     <div style="text-align:center;margin-bottom:1.5rem"><div class="plb"><span class="pld"></span> LIVE</div></div>
-    <h1 id="aq">Apa yang anda tahu tentang AI?</h1>
+    <h1 id="aq">Memuatkan soalan...</h1>
     <p class="asub">Kursus Generatif AI 2026 · PKD Tumpat</p>
     <div style="display:flex;flex-direction:column;gap:1rem">
       <div><label class="al">Nama (pilihan)</label><input type="text" class="ai" id="an" placeholder="cth: Ahmad"></div>
-      <div><label class="al">Jawapan anda</label><textarea class="at" id="aa" rows="4" placeholder="Taip jawapan anda di sini..."></textarea></div>
+      <div><label class="al">Jawapan anda</label><textarea class="at2" id="aa" rows="4" placeholder="Taip jawapan anda di sini..."></textarea></div>
       <button class="abtn" id="ab" disabled onclick="submitR()">Hantar Jawapan →</button>
     </div>
   </div>
   <div class="ac sp" id="as" style="display:none">
     <div class="ej">✅</div>
     <h2>Terima Kasih!</h2>
-    <p>Jawapan anda telah dihantar. Sila lihat ke skrin hadapan untuk melihat hasil secara live.</p>
+    <p>Jawapan anda telah dihantar.<br>Sila lihat ke skrin hadapan untuk melihat hasil secara live.</p>
     <button class="aag" onclick="resetAF()">Hantar jawapan lain</button>
   </div>
 </div>
 
 <div class="particles" id="particles"></div>
 
-<!-- NAV -->
 <nav id="nav">
   <div class="nav-brand">AI KURSUS</div>
   <div class="nav-links">
@@ -214,7 +212,7 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
   <div class="nav-progress" id="prog"></div>
 </nav>
 
-<!-- ============ SLIDE 1: HERO ============ -->
+<!-- SLIDE 1: HERO -->
 <section id="hero" class="hero">
 <div class="inner" style="display:flex;flex-direction:column;align-items:center">
   <div class="hero-badge"><span class="dot"></span> Kursus Generatif AI 2026</div>
@@ -235,25 +233,36 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 <div class="scroll-hint">SCROLL UNTUK MULA<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
 </section>
 
-<!-- ============ SLIDE 2: LIVE POLL ============ -->
+<!-- SLIDE 2: LIVE POLL -->
 <section id="poll">
 <div class="inner">
   <div style="text-align:center;margin-bottom:2rem">
     <div class="plb"><span class="pld"></span> LIVE · <span id="pc">0</span> jawapan</div>
-    <h2 class="pq" id="pqd">Apa yang anda tahu tentang AI?</h2>
-    <p style="font-size:.8rem;color:var(--t3);margin-top:.5rem">Audien scan QR → buka link dengan <code style="background:rgba(255,255,255,.08);padding:.15rem .4rem;border-radius:4px;font-size:.75rem">?mode=respond</code></p>
+
+    <!-- Question Display (click to edit) -->
+    <h2 class="pq-display" id="pqd" onclick="editQ()" title="Klik untuk tukar soalan">Apa yang anda tahu tentang AI?</h2>
+    <p class="pq-edit-hint" id="pqh">✏️ Klik soalan di atas untuk tukar</p>
+
+    <!-- Question Editor -->
+    <div class="pq-editor" id="pqe">
+      <input class="pq-input" id="pqi" type="text" placeholder="Taip soalan baru..." onkeydown="if(event.key==='Enter')saveQ()">
+      <button class="pq-save" onclick="saveQ()">💾 Simpan & Reset</button>
+      <button class="pq-cancel" onclick="cancelQ()">Batal</button>
+    </div>
+
+    <p id="poll-hint" style="font-size:.78rem;color:var(--t3);margin-top:.5rem">Audien scan QR → buka link dengan <code style="background:rgba(255,255,255,.08);padding:.15rem .4rem;border-radius:4px;font-size:.72rem">?mode=respond</code></p>
   </div>
   <div id="wc"></div>
   <div id="lf" style="display:none"></div>
-  <div class="pc">
-    <button class="pb2 active" id="bc" onclick="showC()" style="background:rgba(66,133,244,.3);color:var(--blue)">☁️ Word Cloud</button>
-    <button class="pb2" id="bf" onclick="showF()" style="background:rgba(0,229,255,.1);color:var(--cyan)">📋 Live Feed</button>
-    <button class="pb2" onclick="resetP()" style="background:rgba(234,67,53,.08);color:var(--red)">🗑️ Reset</button>
+  <div class="poll-ctrls">
+    <button class="pbtn" id="bc" onclick="showC()" style="background:rgba(66,133,244,.3);color:var(--blue)">☁️ Word Cloud</button>
+    <button class="pbtn" id="bf" onclick="showF()" style="background:rgba(0,229,255,.1);color:var(--cyan)">📋 Live Feed</button>
+    <button class="pbtn" onclick="resetP()" style="background:rgba(234,67,53,.08);color:var(--red)">🗑️ Reset Jawapan</button>
   </div>
 </div>
 </section>
 
-<!-- ============ SLIDE 3: APA ITU AI ============ -->
+<!-- SLIDE 3: APA ITU AI -->
 <section id="apaitu">
 <div class="inner"><div class="tc"><div>
   <div class="sl rv">PENGENALAN</div><div class="divider rv d1"></div>
@@ -267,7 +276,7 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 </div></div></div></div>
 </section>
 
-<!-- ============ SLIDE 4: KENAPA GEMINI ============ -->
+<!-- SLIDE 4: KENAPA GEMINI -->
 <section id="gemini">
 <div class="inner">
   <div class="sl rv">PLATFORM</div><div class="divider rv d1"></div>
@@ -282,7 +291,7 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 </div>
 </section>
 
-<!-- ============ SLIDE 5: GEMINI TOOLS ============ -->
+<!-- SLIDE 5: GEMINI TOOLS -->
 <section id="tools">
 <div class="inner">
   <div class="sl rv">FUNGSI GEMINI</div><div class="divider rv d1"></div>
@@ -299,7 +308,7 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 </div>
 </section>
 
-<!-- ============ SLIDE 6: PROMPTING ============ -->
+<!-- SLIDE 6: PROMPTING -->
 <section id="prompting">
 <div class="inner"><div class="tc"><div>
   <div class="sl rv">KEMAHIRAN UTAMA</div><div class="divider rv d1"></div>
@@ -326,7 +335,7 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 </div></div></div>
 </section>
 
-<!-- ============ SLIDE 7: GEMS ============ -->
+<!-- SLIDE 7: GEMS -->
 <section id="gems">
 <div class="inner">
   <div class="sl rv">BONUS</div><div class="divider rv d1"></div>
@@ -342,7 +351,7 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 </div>
 </section>
 
-<!-- ============ SLIDE 8: NOTEBOOKLM ============ -->
+<!-- SLIDE 8: NOTEBOOKLM -->
 <section id="nbklm">
 <div class="inner">
   <div class="sl rv">ALAT KEDUA</div><div class="divider rv d1"></div>
@@ -362,7 +371,7 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 </div>
 </section>
 
-<!-- ============ SLIDE 9: TIPS ============ -->
+<!-- SLIDE 9: TIPS -->
 <section id="tips">
 <div class="inner">
   <div class="sl rv">PANDUAN</div><div class="divider rv d1"></div>
@@ -379,7 +388,7 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 </div>
 </section>
 
-<!-- ============ SLIDE 10: PENUTUP ============ -->
+<!-- SLIDE 10: PENUTUP -->
 <section id="end" class="fs">
 <div class="inner" style="display:flex;flex-direction:column;align-items:center">
   <div class="sl rv">TERIMA KASIH</div>
@@ -403,79 +412,113 @@ section{min-height:100vh;position:relative;z-index:1;display:flex;align-items:ce
 
 <script>
 // ============ FIREBASE ============
-const firebaseConfig = {
-  apiKey: "AIzaSyCF2wqvEYoDsvmF3ydi2iuYwy7jfb_aK2w",
-  authDomain: "qa-cloud-b2392.firebaseapp.com",
-  databaseURL: "https://qa-cloud-b2392-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "qa-cloud-b2392",
-  storageBucket: "qa-cloud-b2392.firebasestorage.app",
-  messagingSenderId: "748949912467",
-  appId: "1:748949912467:web:eb85010fa7d48648740666"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-const pollRef = db.ref('poll');
+firebase.initializeApp({
+  apiKey:"AIzaSyCF2wqvEYoDsvmF3ydi2iuYwy7jfb_aK2w",
+  authDomain:"qa-cloud-b2392.firebaseapp.com",
+  databaseURL:"https://qa-cloud-b2392-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"qa-cloud-b2392",
+  storageBucket:"qa-cloud-b2392.firebasestorage.app",
+  messagingSenderId:"748949912467",
+  appId:"1:748949912467:web:eb85010fa7d48648740666"
+});
+const db=firebase.database(),pollRef=db.ref('poll');
 
-// ============ COLORS ============
+// ============ HELPERS ============
 const CL=['#4285f4','#ea4335','#fbbc04','#34a853','#00e5ff','#a855f7','#ff6b6b','#ffd93d','#6bcb77','#4d96ff'];
 function hc(s){let h=0;for(let i=0;i<s.length;i++)h=((h<<5)-h+s.charCodeAt(i))|0;return CL[Math.abs(h)%CL.length]}
-
-// ============ STOP WORDS ============
 const SW=new Set('yang dan di itu ini adalah untuk dengan tidak ada dari ke saya boleh akan pada juga atau ia kita apa tentang macam seperti tak bukan per bagi oleh ialah telah sudah sedang masih belum lagi pun pula sahaja hanya jika kalau maka tetapi namun walau bagaimana bila mana the a an is it and of to in that can but have has been was are were be do does did could would should may might shall will got get its let very just even well only then than too also how when where what why who which each all some any more most much many few both other another such same so no nor not own our my your his her'.split(' '));
+
+function toast(msg,type){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast '+(type||'toast-ok')+' show';
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
 
 // ============ WORD CLOUD ============
 function buildWC(resps){
   const f={};
-  resps.forEach(r=>{
-    r.text.toLowerCase().replace(/[^a-zA-Z0-9\u00C0-\u024F\s]/g,'').split(/\s+/)
-    .filter(w=>w.length>2&&!SW.has(w)).forEach(w=>{f[w]=(f[w]||0)+1});
-  });
+  resps.forEach(r=>{r.text.toLowerCase().replace(/[^a-zA-Z0-9\u00C0-\u024F\s]/g,'').split(/\s+/).filter(w=>w.length>2&&!SW.has(w)).forEach(w=>{f[w]=(f[w]||0)+1})});
   return Object.entries(f).map(([t,c])=>({t,c})).sort((a,b)=>b.c-a.c).slice(0,60);
 }
 function renderWC(words){
   const el=document.getElementById('wc');
   if(!words.length){el.innerHTML='';return}
   const mx=Math.max(...words.map(w=>w.c),1);
-  el.innerHTML=words.map((w,i)=>{
-    const r=w.c/mx,sz=1+r*3.5,fw=r>.5?800:r>.25?600:400,op=.5+r*.5;
-    return`<span class="ww" style="font-size:${sz}rem;font-weight:${fw};color:${hc(w.t)};opacity:${op};animation-delay:${i*.03}s">${w.t}</span>`;
-  }).join('');
+  el.innerHTML=words.map((w,i)=>{const r=w.c/mx;return`<span class="ww" style="font-size:${1+r*3.5}rem;font-weight:${r>.5?800:r>.25?600:400};color:${hc(w.t)};opacity:${.5+r*.5};animation-delay:${i*.03}s">${w.t}</span>`}).join('');
 }
 function renderFeed(resps){
   const el=document.getElementById('lf');
   if(!resps.length){el.innerHTML='<div style="text-align:center;color:var(--t3);padding:3rem;font-size:.9rem">Menunggu jawapan daripada audien...</div>';return}
-  el.innerHTML=resps.slice().reverse().map((r,i)=>`
-    <div class="fi" style="animation-delay:${i*.04}s">
-      <div class="fa" style="background:linear-gradient(135deg,${hc(r.text)},${hc(r.text+'x')})">${(r.name||'?').charAt(0).toUpperCase()}</div>
-      <div><div class="fm">${r.name||'Anonim'} · ${r.time||''}</div><div class="ft">${r.text}</div></div>
-    </div>`).join('');
+  el.innerHTML=resps.slice().reverse().map((r,i)=>`<div class="fi" style="animation-delay:${i*.04}s"><div class="fa" style="background:linear-gradient(135deg,${hc(r.text)},${hc(r.text+'x')})">${(r.name||'?').charAt(0).toUpperCase()}</div><div><div class="fm">${r.name||'Anonim'} · ${r.time||''}</div><div class="ft">${r.text}</div></div></div>`).join('');
 }
-function refresh(resps){
-  document.getElementById('pc').textContent=resps.length;
-  renderWC(buildWC(resps));
-  renderFeed(resps);
-}
+function refresh(resps){document.getElementById('pc').textContent=resps.length;renderWC(buildWC(resps));renderFeed(resps)}
 
-// ============ FIREBASE LISTENER ============
-pollRef.child('responses').on('value',snap=>{
-  const d=snap.val();refresh(d?Object.values(d):[]);
+// ============ FIREBASE LISTENERS ============
+pollRef.child('responses').on('value',snap=>{const d=snap.val();refresh(d?Object.values(d):[])});
+
+let currentQ='Apa yang anda tahu tentang AI?';
+let isAudience=new URLSearchParams(window.location.search).get('mode')==='respond';
+
+// Question listener — updates both facilitator + audience in real-time
+pollRef.child('question').on('value',snap=>{
+  const q=snap.val()||'Apa yang anda tahu tentang AI?';
+  const oldQ=currentQ;
+  currentQ=q;
+  document.getElementById('pqd').textContent=q;
+  // Audience: update question + show notification
+  if(isAudience){
+    document.getElementById('aq').textContent=q;
+    if(oldQ!==q&&oldQ!=='Memuatkan soalan...'){
+      // Show update banner
+      const upd=document.getElementById('q-upd');
+      upd.textContent='📢 Soalan baru: '+q;
+      upd.classList.add('show');
+      setTimeout(()=>upd.classList.remove('show'),3000);
+      // Reset form for new question
+      resetAF();
+    }
+  }
 });
 
-// ============ VIEW TOGGLE ============
-let cv='cloud';
-function showC(){cv='cloud';document.getElementById('wc').style.display='flex';document.getElementById('lf').style.display='none';document.getElementById('bc').style.background='rgba(66,133,244,.3)';document.getElementById('bf').style.background='rgba(0,229,255,.1)'}
-function showF(){cv='feed';document.getElementById('wc').style.display='none';document.getElementById('lf').style.display='flex';document.getElementById('bf').style.background='rgba(0,229,255,.25)';document.getElementById('bc').style.background='rgba(66,133,244,.15)'}
+// ============ FACILITATOR: QUESTION EDITOR ============
+function editQ(){
+  if(isAudience)return;
+  document.getElementById('pqd').style.display='none';
+  document.getElementById('pqh').style.display='none';
+  document.getElementById('poll-hint').style.display='none';
+  const editor=document.getElementById('pqe');
+  editor.classList.add('active');
+  const input=document.getElementById('pqi');
+  input.value=currentQ;
+  input.focus();
+  input.select();
+}
+function saveQ(){
+  const newQ=document.getElementById('pqi').value.trim();
+  if(!newQ)return;
+  // Save question + clear responses
+  pollRef.update({question:newQ});
+  pollRef.child('responses').remove();
+  cancelQ();
+  toast('✅ Soalan dikemaskini & jawapan di-reset');
+}
+function cancelQ(){
+  document.getElementById('pqe').classList.remove('active');
+  document.getElementById('pqd').style.display='block';
+  document.getElementById('pqh').style.display='block';
+  document.getElementById('poll-hint').style.display='block';
+}
 
-// ============ SUBMIT ============
+// ============ VIEW TOGGLE ============
+function showC(){document.getElementById('wc').style.display='flex';document.getElementById('lf').style.display='none';document.getElementById('bc').style.background='rgba(66,133,244,.3)';document.getElementById('bf').style.background='rgba(0,229,255,.1)'}
+function showF(){document.getElementById('wc').style.display='none';document.getElementById('lf').style.display='flex';document.getElementById('bf').style.background='rgba(0,229,255,.25)';document.getElementById('bc').style.background='rgba(66,133,244,.15)'}
+
+// ============ AUDIENCE: SUBMIT ============
 function submitR(){
   const name=document.getElementById('an').value.trim()||'Anonim';
   const text=document.getElementById('aa').value.trim();
   if(!text)return;
-  pollRef.child('responses').push({
-    name,text,
-    time:new Date().toLocaleTimeString('ms-MY',{hour:'2-digit',minute:'2-digit'}),
-    ts:Date.now()
-  });
+  pollRef.child('responses').push({name,text,time:new Date().toLocaleTimeString('ms-MY',{hour:'2-digit',minute:'2-digit'}),ts:Date.now()});
   document.getElementById('af').style.display='none';
   document.getElementById('as').style.display='block';
 }
@@ -487,28 +530,21 @@ function resetAF(){
 document.getElementById('aa').addEventListener('input',function(){document.getElementById('ab').disabled=!this.value.trim()});
 
 // ============ RESET POLL ============
-function resetP(){if(!confirm('Reset semua jawapan?'))return;pollRef.child('responses').remove();refresh([])}
+function resetP(){if(!confirm('Reset semua jawapan?'))return;pollRef.child('responses').remove();refresh([]);toast('🗑️ Jawapan telah di-reset')}
 
 // ============ MODE DETECT ============
 (function(){
-  const p=new URLSearchParams(window.location.search);
-  if(p.get('mode')==='respond'){
+  if(isAudience){
     document.getElementById('ap').style.display='flex';
     document.getElementById('nav').style.display='none';
     document.querySelector('.particles').style.display='none';
     document.querySelectorAll('section').forEach(s=>s.style.display='none');
     document.querySelector('.kh').style.display='none';
-    // Load question
-    pollRef.child('question').on('value',snap=>{const q=snap.val();if(q)document.getElementById('aq').textContent=q});
   }
 })();
 
 // ============ PARTICLES ============
-(function(){
-  const c=document.getElementById('particles');if(!c)return;
-  const cl=['rgba(66,133,244,.4)','rgba(234,67,53,.3)','rgba(251,188,4,.35)','rgba(52,168,83,.35)','rgba(0,229,255,.3)'];
-  for(let i=0;i<30;i++){const p=document.createElement('div');p.className='particle';const s=Math.random()*3+1;p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;background:${cl[Math.floor(Math.random()*cl.length)]};animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*10}s`;c.appendChild(p)}
-})();
+(function(){const c=document.getElementById('particles');if(!c)return;const cl=['rgba(66,133,244,.4)','rgba(234,67,53,.3)','rgba(251,188,4,.35)','rgba(52,168,83,.35)','rgba(0,229,255,.3)'];for(let i=0;i<30;i++){const p=document.createElement('div');p.className='particle';const s=Math.random()*3+1;p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;background:${cl[Math.floor(Math.random()*cl.length)]};animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*10}s`;c.appendChild(p)}})();
 
 // ============ SCROLL REVEAL ============
 const rvs=document.querySelectorAll('.rv');
@@ -516,24 +552,15 @@ const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.ta
 rvs.forEach(r=>obs.observe(r));
 
 // ============ NAV ============
-const secs=document.querySelectorAll('section');
-const nls=document.querySelectorAll('.nav-link');
-const prog=document.getElementById('prog');
-window.addEventListener('scroll',()=>{
-  const sp=window.scrollY+200;
-  secs.forEach((s,i)=>{if(sp>=s.offsetTop&&sp<s.offsetTop+s.offsetHeight){nls.forEach(l=>l.classList.remove('active'));nls[i]&&nls[i].classList.add('active')}});
-  const t=document.documentElement.scrollHeight-window.innerHeight;
-  prog.style.width=(window.scrollY/t)*100+'%';
-});
-
-// ============ KEYBOARD NAV ============
+const secs=document.querySelectorAll('section'),nls=document.querySelectorAll('.nav-link'),prog=document.getElementById('prog');
+window.addEventListener('scroll',()=>{const sp=window.scrollY+200;secs.forEach((s,i)=>{if(sp>=s.offsetTop&&sp<s.offsetTop+s.offsetHeight){nls.forEach(l=>l.classList.remove('active'));nls[i]&&nls[i].classList.add('active')}});prog.style.width=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100+'%'});
 const sids=[...secs].map(s=>s.id);let cs=0;
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();cs=Math.min(cs+1,sids.length-1);document.getElementById(sids[cs]).scrollIntoView({behavior:'smooth'})}
-  if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();cs=Math.max(cs-1,0);document.getElementById(sids[cs]).scrollIntoView({behavior:'smooth'})}
-});
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();cs=Math.min(cs+1,sids.length-1);document.getElementById(sids[cs]).scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();cs=Math.max(cs-1,0);document.getElementById(sids[cs]).scrollIntoView({behavior:'smooth'})}});
 window.addEventListener('scroll',()=>{const sp=window.scrollY+window.innerHeight/2;secs.forEach((s,i)=>{if(sp>=s.offsetTop&&sp<s.offsetTop+s.offsetHeight)cs=i})});
 nls.forEach(l=>{l.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(l.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})});
+
+// Init: set default question in Firebase if not exists
+pollRef.child('question').once('value',snap=>{if(!snap.val())pollRef.child('question').set('Apa yang anda tahu tentang AI?')});
 </script>
 </body>
 </html>
